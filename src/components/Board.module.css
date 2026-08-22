@@ -5,62 +5,55 @@
 }
 
 .sprintHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .headerTitleSection {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .titleGroup {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .titleRow {
   display: flex;
   align-items: center;
   gap: 8px;
-  cursor: pointer;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
 }
 
 .titleDark {
-  color: #FFFFFF;
+  color: #F8FAFC;
 }
 
 .titleLight {
   color: #0F172A;
 }
 
-.caretIcon {
-  font-size: 0.9rem;
-  color: #94A3B8;
-  margin-top: 4px;
-}
-
 .subtitle {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.8rem;
   font-weight: 500;
 }
 
 .subtitleDark {
-  color: #9CA3AF;
+  color: #94A3B8;
 }
 
 .subtitleLight {
@@ -70,22 +63,21 @@
 .avatarStack {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 6px;
 }
 
 .avatarItem {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  margin-left: -10px;
-  border: 2.5px solid #0F172A;
+  margin-left: -8px;
+  border: 2px solid #0D0E14;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.65rem;
+  font-weight: 600;
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .avatarLight {
@@ -93,31 +85,36 @@
 }
 
 .avatarMore {
-  background: #0F172A;
-  color: #FFFFFF;
-  font-size: 0.68rem;
+  background: #1E293B;
+  color: #94A3B8;
+  font-size: 0.62rem;
 }
 
 .headerControls {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .searchBar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  border-radius: 12px;
-  width: 260px;
-  transition: all 0.2s ease;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  width: 220px;
+  transition: all 0.15s ease;
 }
 
 .searchBarDark {
-  background: #181820;
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: #F8FAFC;
+}
+
+.searchBarDark:focus-within {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .searchBarLight {
@@ -126,16 +123,26 @@
   color: #0F172A;
 }
 
+.searchBarLight:focus-within {
+  border-color: #3B82F6;
+  background: #FFFFFF;
+}
+
+.searchIcon {
+  font-size: 0.8rem;
+  color: #94A3B8;
+}
+
 .searchInput {
   border: none;
   background: transparent;
   outline: none;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   width: 100%;
 }
 
 .searchInputDark {
-  color: #FFFFFF;
+  color: #F8FAFC;
 }
 
 .searchInputDark::placeholder {
@@ -153,14 +160,14 @@
 .viewToggle {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 10px;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 8px;
 }
 
 .viewToggleDark {
-  background: #181820;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .viewToggleLight {
@@ -169,38 +176,39 @@
 }
 
 .toggleBtn {
-  padding: 6px 10px;
-  border-radius: 7px;
+  padding: 4px 10px;
+  border-radius: 6px;
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 500;
   color: #94A3B8;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .toggleBtnActiveDark {
-  background: #272732;
-  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
 }
 
 .toggleBtnActiveLight {
   background: #FFFFFF;
   color: #0F172A;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .columnsWrapper {
   display: flex;
-  gap: 1.4rem;
+  gap: 1.25rem;
   overflow-x: auto;
-  padding-bottom: 1.8rem;
+  padding-bottom: 1.5rem;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 
 .columnsWrapper::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
 
 .columnsWrapper::-webkit-scrollbar-track {
@@ -208,6 +216,6 @@
 }
 
 .columnsWrapper::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.25);
-  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 9999px;
 }

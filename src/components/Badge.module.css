@@ -1,0 +1,202 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  letter-spacing: 0.1px;
+}
+
+/* Sizes */
+.sizeSm {
+  padding: 2px 7px;
+  font-size: 0.68rem;
+  gap: 4px;
+}
+
+.sizeMd {
+  padding: 3px 9px;
+  font-size: 0.74rem;
+  gap: 5px;
+}
+
+.sizeLg {
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  gap: 6px;
+}
+
+/* Shapes */
+.pill {
+  border-radius: 9999px;
+}
+
+.rounded {
+  border-radius: 6px;
+}
+
+/* Solid Status Headers */
+.statusTodo {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.statusInProgress {
+  background-color: #f97316;
+  color: #ffffff;
+}
+
+.statusInReview {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.statusDone {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+/* Subtle Status Variants (Clean minimal) */
+.subtleTodo {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.subtleInProgress {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.subtleInReview {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.subtleDone {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #4ade80;
+  border-color: rgba(22, 163, 74, 0.2);
+}
+
+/* Minimal Category Variants */
+.catUxDesign {
+  background-color: rgba(249, 115, 22, 0.08);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.18);
+}
+
+.cat3dDesign {
+  background-color: rgba(6, 182, 212, 0.08);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.18);
+}
+
+.catUiDesign {
+  background-color: rgba(236, 72, 153, 0.08);
+  color: #f472b6;
+  border-color: rgba(236, 72, 153, 0.18);
+}
+
+.catIllustration {
+  background-color: rgba(168, 85, 247, 0.08);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.18);
+}
+
+/* General Variants */
+.variantPrimary {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.variantSecondary {
+  background-color: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+}
+
+.variantSuccess {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.variantWarning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.variantDanger {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.variantInfo {
+  background-color: rgba(14, 165, 233, 0.1);
+  color: #38bdf8;
+}
+
+.variantNeutral {
+  background-color: rgba(148, 163, 184, 0.08);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+.variantOutline {
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  filter: brightness(1.15);
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+  display: inline-block;
+}
+
+/* Light Theme Adjustments */
+.badgeLight.catUxDesign,
+:global(body:not(.dark)) .catUxDesign {
+  background-color: rgba(249, 115, 22, 0.08);
+  color: #ea580c;
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.badgeLight.cat3dDesign,
+:global(body:not(.dark)) .cat3dDesign {
+  background-color: rgba(6, 182, 212, 0.08);
+  color: #0891b2;
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.badgeLight.catUiDesign,
+:global(body:not(.dark)) .catUiDesign {
+  background-color: rgba(236, 72, 153, 0.08);
+  color: #db2777;
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
+.badgeLight.catIllustration,
+:global(body:not(.dark)) .catIllustration {
+  background-color: rgba(168, 85, 247, 0.08);
+  color: #9333ea;
+  border-color: rgba(168, 85, 247, 0.2);
+}

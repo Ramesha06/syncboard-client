@@ -1,30 +1,27 @@
 .column {
-  border-radius: 22px;
-  width: 330px;
-  min-width: 310px;
-  min-height: 640px;
+  border-radius: 14px;
+  width: 295px;
+  min-width: 280px;
+  min-height: 560px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
 }
 
 .columnDark {
-  background: rgba(22, 22, 30, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: rgba(18, 19, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .columnLight {
-  background: #F4F5F7;
-  border: 1px solid #E9ECEF;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
 }
 
 .columnHeader {
-  padding: 1.2rem 1.25rem 0.8rem 1.25rem;
+  padding: 0.9rem 1rem 0.6rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,55 +31,40 @@
 .headerLeft {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.statusPill {
-  padding: 6px 18px;
-  border-radius: 24px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #FFFFFF;
-  letter-spacing: 0.2px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 8px;
 }
 
 .circleCount {
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  font-size: 0.82rem;
+  font-size: 0.7rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .circleCountDark {
-  background: rgba(255, 255, 255, 0.05);
-  color: #E2E8F0;
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #94A3B8;
 }
 
 .circleCountLight {
-  background: #FFFFFF;
-  color: #334155;
-  border: 1.5px solid #CBD5E1;
+  background: #E2E8F0;
+  color: #64748B;
 }
 
 .headerAddBtn {
   background: transparent;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,7 +76,7 @@
 
 .headerAddBtnDark:hover {
   color: #F8FAFC;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .headerAddBtnLight {
@@ -102,22 +84,22 @@
 }
 
 .headerAddBtnLight:hover {
-  color: #1E293B;
-  background: rgba(0, 0, 0, 0.05);
+  color: #0F172A;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .columnBody {
-  padding: 1rem 1.1rem 1.2rem 1.1rem;
+  padding: 0.6rem 0.8rem 0.8rem 0.8rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
   overflow-y: auto;
-  max-height: calc(100vh - 240px);
+  max-height: calc(100vh - 220px);
 }
 
 .columnBody::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 .columnBody::-webkit-scrollbar-track {
@@ -125,63 +107,20 @@
 }
 
 .columnBody::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.25);
-  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.12);
+  border-radius: 9999px;
 }
 
 .emptyState {
-  border: 2px dashed rgba(156, 163, 175, 0.25);
-  border-radius: 14px;
-  padding: 2.2rem 1rem;
+  border: 1px dashed rgba(148, 163, 184, 0.15);
+  border-radius: 10px;
+  padding: 1.8rem 1rem;
   text-align: center;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: #9CA3AF;
+  color: #64748B;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.01);
-}
-
-.addTaskBtn {
-  border-radius: 12px;
-  padding: 0.85rem;
-  text-align: center;
-  font-size: 0.84rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  user-select: none;
-  margin-top: 4px;
-}
-
-.addTaskBtnDark {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px dashed rgba(255, 255, 255, 0.15);
-  color: #A1A1AA;
-}
-
-.addTaskBtnDark:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #FFFFFF;
-}
-
-.addTaskBtnLight {
-  background: #FFFFFF;
-  border: 1.5px dashed #CBD5E1;
-  color: #64748B;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-}
-
-.addTaskBtnLight:hover {
-  background: #F8FAFC;
-  border-color: #94A3B8;
-  color: #0F172A;
 }
