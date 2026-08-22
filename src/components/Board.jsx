@@ -1,19 +1,9 @@
 import React from 'react';
 import Column from './Column';
-import Badge from './Badge';
 import { useTasks } from '../context';
+import { DEFAULT_COLUMNS } from '../constants/columns';
 import styles from './Board.module.css';
 import TaskCard from './TaskCard'
-
-/**
- * Default JERRAA Template Columns Definition
- */
-const DEFAULT_COLUMNS = [
-  { id: 'todo', title: 'To Do', accentColor: '#3B82F6' },
-  { id: 'in_progress', title: 'In Progress', accentColor: '#F97316' },
-  { id: 'in_review', title: 'Submitted', accentColor: '#10B981' },
-  { id: 'done', title: 'Done', accentColor: '#22C55E' },
-];
 
 /**
  * Board Component (Clean, Minimal, Modern Layout)
@@ -185,7 +175,7 @@ export default function Board({
                   renderTask ? (
                     renderTask(task, col.id, index)
                   ) : (
-                    <DefaultTaskCard
+                    <TaskCard
                       key={task.id || index}
                       task={task}
                       darkMode={darkMode}
@@ -204,7 +194,7 @@ export default function Board({
 /**
  * Clean & Minimal Task Card
  */
-function DefaultTaskCard({ task, darkMode }) {
+function TaskCard({ task, darkMode }) {
   return (
     <div
       style={{
