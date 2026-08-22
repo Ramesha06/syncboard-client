@@ -120,3 +120,26 @@
 .dueDateLight {
     color: #94A3B8;
 }
+
+.actionRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid transparent;
+}
+
+.actionRowDark {
+    border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.actionRowLight {
+    border-top-color: #F1F5F9;
+}
+
+.moveGroup {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

@@ -1,0 +1,100 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.overlayDark {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.overlayLight {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 14px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: rise 0.15s ease;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dialogDark {
+  background: #13141c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.dialogLight {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+}
+
+.iconWrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.title {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.titleDark {
+  color: #f8fafc;
+}
+
+.titleLight {
+  color: #0f172a;
+}
+
+.message {
+  margin: 0 0 1.4rem 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.messageDark {
+  color: #94a3b8;
+}
+
+.messageLight {
+  color: #64748b;
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+}
