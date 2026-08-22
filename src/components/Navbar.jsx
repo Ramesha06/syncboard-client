@@ -10,10 +10,11 @@ export default function Navbar({ darkMode, setDarkMode }) {
         background: theme.navBackground,
         color: theme.text,
         borderBottom: `1px solid ${theme.border}`,
-        boxShadow: theme.navShadow,
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
       }}
     >
-      {/* Logo */}
+      {/* Brand Logo */}
       <div style={styles.logoContainer}>
         <div
           style={{
@@ -23,27 +24,30 @@ export default function Navbar({ darkMode, setDarkMode }) {
           }}
         >
           <svg
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#60A5FA"
+            stroke="#3B82F6"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M12 2L2 22h20L12 2z" />
+            <rect x="3" y="3" width="18" height="18" rx="4" />
+            <path d="M9 3v18" />
+            <path d="M15 9h6" />
+            <path d="M15 15h6" />
           </svg>
         </div>
 
-        <h2
+        <span
           style={{
             ...styles.logoText,
             color: theme.heading,
           }}
         >
           SyncBoard
-        </h2>
+        </span>
       </div>
 
       {/* Navigation */}
@@ -52,59 +56,46 @@ export default function Navbar({ darkMode, setDarkMode }) {
           to="/"
           style={{
             ...styles.link,
-            ...styles.activeLink,
             color: theme.activeText,
+            backgroundColor: theme.activeLinkBg,
           }}
         >
           Board
         </Link>
 
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>
+        <Link
+          to="#"
+          style={{
+            ...styles.link,
+            color: theme.mutedText,
+          }}
+        >
           Issues
         </Link>
 
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>
-          Views
+        <Link
+          to="#"
+          style={{
+            ...styles.link,
+            color: theme.mutedText,
+          }}
+        >
+          Timeline
         </Link>
 
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>
+        <Link
+          to="#"
+          style={{
+            ...styles.link,
+            color: theme.mutedText,
+          }}
+        >
           Settings
         </Link>
       </div>
 
-      {/* Right Section */}
+      {/* Right Controls */}
       <div style={styles.rightSection}>
-        <div
-          style={{
-            ...styles.searchWrapper,
-            backgroundColor: theme.searchBackground,
-            border: `1px solid ${theme.border}`,
-          }}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={theme.searchIcon}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-4-4" />
-          </svg>
-
-          <input
-            type="text"
-            placeholder="Search..."
-            style={{
-              ...styles.searchInput,
-              color: theme.text,
-            }}
-          />
-        </div>
-
         {/* Theme Toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
@@ -116,11 +107,20 @@ export default function Navbar({ darkMode, setDarkMode }) {
           }}
           title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          {darkMode ? '☀' : '☾'}
+          {darkMode ? '☀️' : '🌙'}
         </button>
 
-        {/* Avatar */}
-        <div style={styles.avatar}>RW</div>
+        {/* User Avatar */}
+        <div
+          style={{
+            ...styles.avatar,
+            background: theme.avatarBg,
+            border: `1px solid ${theme.avatarBorder}`,
+            color: theme.avatarText,
+          }}
+        >
+          RW
+        </div>
       </div>
     </nav>
   );
@@ -131,145 +131,113 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 2.5rem',
-    height: '68px',
-    position: 'relative',
-    zIndex: 10,
-    transition: 'all 0.3s ease',
+    padding: '0 2rem',
+    height: '58px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 50,
+    transition: 'background 0.2s ease, border-color 0.2s ease',
   },
 
   logoContainer: {
     display: 'flex',
     alignItems: 'center',
-    gap: '11px',
-    minWidth: '180px',
+    gap: '9px',
+    minWidth: '150px',
   },
 
   logoIcon: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '34px',
-    height: '34px',
-    borderRadius: '9px',
-    transition: 'all 0.3s ease',
+    width: '30px',
+    height: '30px',
+    borderRadius: '8px',
   },
 
   logoText: {
-    margin: 0,
-    fontSize: '1.2rem',
+    fontSize: '0.96rem',
     fontWeight: '700',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.3px',
   },
 
   linksContainer: {
     display: 'flex',
-    height: '100%',
-    gap: '2.2rem',
+    alignItems: 'center',
+    gap: '6px',
   },
 
   link: {
     textDecoration: 'none',
-    fontSize: '0.9rem',
+    fontSize: '0.84rem',
     fontWeight: '500',
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    borderBottom: '2px solid transparent',
-    padding: '0 2px',
-    transition: 'all 0.2s ease',
-  },
-
-  activeLink: {
-    borderBottom: '2px solid #60A5FA',
+    padding: '5px 12px',
+    borderRadius: '6px',
+    transition: 'all 0.15s ease',
   },
 
   rightSection: {
     display: 'flex',
     alignItems: 'center',
-    gap: '0.8rem',
-    minWidth: '280px',
+    gap: '10px',
     justifyContent: 'flex-end',
-  },
-
-  searchWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    borderRadius: '9px',
-    padding: '0 12px',
-    width: '190px',
-    height: '36px',
-    transition: 'all 0.3s ease',
-  },
-
-  searchInput: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    outline: 'none',
-    boxShadow: 'none',
-    fontSize: '0.85rem',
-    width: '100%',
+    minWidth: '150px',
   },
 
   themeButton: {
-    width: '36px',
-    height: '36px',
-    borderRadius: '9px',
+    width: '32px',
+    height: '32px',
+    borderRadius: '8px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
-    fontSize: '17px',
-    transition: 'all 0.2s ease',
+    fontSize: '13px',
+    transition: 'all 0.15s ease',
   },
 
   avatar: {
-    width: '35px',
-    height: '35px',
-    background: 'linear-gradient(135deg, #60A5FA, #2563EB)',
-    color: '#FFFFFF',
+    width: '30px',
+    height: '30px',
     borderRadius: '50%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '0.75rem',
-    fontWeight: '700',
-    boxShadow: '0 0 18px rgba(59, 130, 246, 0.2)',
-    border: '1px solid rgba(255,255,255,0.12)',
+    fontSize: '0.72rem',
+    fontWeight: '600',
   },
 };
 
 const darkTheme = {
-  navBackground: 'rgba(10, 10, 10, 0.96)',
-  text: '#EDEDED',
-  heading: '#FFFFFF',
-  activeText: '#FFFFFF',
-  mutedText: '#737373',
-  border: '#252525',
-  navShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
-  logoBackground:
-    'linear-gradient(135deg, rgba(96,165,250,0.18), rgba(59,130,246,0.06))',
-  logoBorder: 'rgba(96,165,250,0.2)',
-  searchBackground: '#111111',
-  searchIcon: '#737373',
-  toggleBackground: '#151515',
-  toggleText: '#FACC15',
+  navBackground: 'rgba(13, 14, 20, 0.88)',
+  text: '#E2E8F0',
+  heading: '#F8FAFC',
+  activeText: '#F8FAFC',
+  activeLinkBg: 'rgba(255, 255, 255, 0.08)',
+  mutedText: '#94A3B8',
+  border: 'rgba(255, 255, 255, 0.06)',
+  logoBackground: 'rgba(59, 130, 246, 0.12)',
+  logoBorder: 'rgba(59, 130, 246, 0.25)',
+  toggleBackground: 'rgba(255, 255, 255, 0.04)',
+  toggleText: '#F8FAFC',
+  avatarBg: 'rgba(59, 130, 246, 0.2)',
+  avatarBorder: 'rgba(59, 130, 246, 0.4)',
+  avatarText: '#93C5FD',
 };
 
 const lightTheme = {
-  navBackground: 'rgba(255, 255, 255, 0.95)',
-  text: '#171717',
-  heading: '#111827',
-  activeText: '#111827',
-  mutedText: '#737373',
-  border: '#E5E7EB',
-  navShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
-  logoBackground:
-    'linear-gradient(135deg, rgba(96,165,250,0.12), rgba(59,130,246,0.04))',
-  logoBorder: 'rgba(96,165,250,0.2)',
-  searchBackground: '#F8FAFC',
-  searchIcon: '#94A3B8',
+  navBackground: 'rgba(255, 255, 255, 0.92)',
+  text: '#1E293B',
+  heading: '#0F172A',
+  activeText: '#0F172A',
+  activeLinkBg: '#F1F5F9',
+  mutedText: '#64748B',
+  border: '#E2E8F0',
+  logoBackground: 'rgba(59, 130, 246, 0.08)',
+  logoBorder: 'rgba(59, 130, 246, 0.2)',
   toggleBackground: '#F8FAFC',
-  toggleText: '#334155',
+  toggleText: '#475569',
+  avatarBg: '#EFF6FF',
+  avatarBorder: '#BFDBFE',
+  avatarText: '#2563EB',
 };

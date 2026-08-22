@@ -4,14 +4,14 @@ import Button from './Button';
 import styles from './Column.module.css';
 
 /**
- * Column Component (Member 2 Responsibility - JERRAA Template Design)
- * Renders an individual Kanban column with solid pill header, circle count badge, top-right add button, and task slots.
+ * Clean & Minimal Column Component
+ * Renders an individual Kanban column with a subtle status badge, count indicator, and task slots.
  */
 export default function Column({
   id,
   title,
   count = 0,
-  accentColor = '#2563EB',
+  accentColor = '#3B82F6',
   darkMode = true,
   children,
   onAddTask,
@@ -31,38 +31,32 @@ export default function Column({
       {/* Column Header */}
       <div className={styles.columnHeader}>
         <div className={styles.headerLeft}>
-          {/* Solid Pill Status Badge using reusable Badge */}
           <Badge
             status={id}
             accentColor={accentColor}
+            variant="subtle"
             size="sm"
             pill
+            dot
             darkMode={darkMode}
           >
             {title}
           </Badge>
 
-          {/* Circle Count Badge */}
-          <div
-            className={circleCountClass}
-            style={{ borderColor: accentColor, color: darkMode ? '#FFFFFF' : accentColor }}
-          >
+          <span className={circleCountClass}>
             {count}
-          </div>
+          </span>
         </div>
 
-        {/* Top-Right Quick Add Action using reusable Button */}
-        <Button
+        {/* Top-Right Quick Add Action */}
+        <button
           type="button"
-          variant="ghost"
-          size="icon-sm"
           className={addBtnClass}
           onClick={() => onAddTask && onAddTask(id)}
           title={`Add task to ${title}`}
-          darkMode={darkMode}
         >
           +
-        </Button>
+        </button>
       </div>
 
       {/* Column Body & Task Card Slots */}
@@ -75,7 +69,7 @@ export default function Column({
           </div>
         )}
 
-        {/* Bottom Add Task Button Slot using reusable Button */}
+        {/* Bottom Add Task Button */}
         <Button
           type="button"
           variant="dashed"

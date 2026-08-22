@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 :root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -11,55 +13,45 @@
 }
 
 html {
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0;
+  padding: 0;
   width: 100%;
   min-height: 100%;
-  background: #000;
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  min-width: 100% !important;
+  margin: 0;
+  padding: 0;
+  width: 100%;
   min-height: 100vh;
-  background: #000;
   overflow-x: hidden;
 }
 
 #root {
-  width: 100% !important;
-  max-width: none !important;
+  width: 100%;
   min-height: 100vh;
-  margin: 0 !important;
-  padding: 0 !important;
-  text-align: left;
-  border: none !important;
-  outline: none !important;
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Remove any default focus outline from the dashboard */
 button,
-input {
+input,
+select,
+textarea {
   font-family: inherit;
 }
 
-button:focus,
-input:focus {
-  outline: none;
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
-/* Smooth scrolling for the board */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Scrollbar styling */
+/* Minimal Modern Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -67,10 +59,10 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #292929;
-  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b3b3b;
+  background: rgba(148, 163, 184, 0.4);
 }

@@ -3,35 +3,35 @@
   align-items: center;
   justify-content: center;
   font-family: inherit;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
-  border-radius: 9999px;
+  border-radius: 6px;
   border: 1px solid transparent;
   box-sizing: border-box;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  letter-spacing: 0.2px;
+  transition: all 0.15s ease;
+  letter-spacing: 0.1px;
 }
 
 /* Sizes */
 .sizeSm {
-  padding: 3px 8px;
-  font-size: 0.7rem;
+  padding: 2px 7px;
+  font-size: 0.68rem;
   gap: 4px;
 }
 
 .sizeMd {
-  padding: 4px 12px;
-  font-size: 0.75rem;
-  gap: 6px;
+  padding: 3px 9px;
+  font-size: 0.74rem;
+  gap: 5px;
 }
 
 .sizeLg {
-  padding: 6px 16px;
-  font-size: 0.85rem;
-  gap: 8px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  gap: 6px;
 }
 
 /* Shapes */
@@ -40,17 +40,17 @@
 }
 
 .rounded {
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
-/* Status variants (Solid Style for headers & prominent tags) */
+/* Solid Status Headers */
 .statusTodo {
   background-color: #2563eb;
   color: #ffffff;
 }
 
 .statusInProgress {
-  background-color: #ff8a00;
+  background-color: #f97316;
   color: #ffffff;
 }
 
@@ -64,87 +64,91 @@
   color: #ffffff;
 }
 
-/* Soft / Subtle Status Variants (for card tags & pills) */
+/* Subtle Status Variants (Clean minimal) */
 .subtleTodo {
-  background-color: rgba(37, 99, 235, 0.15);
+  background-color: rgba(59, 130, 246, 0.1);
   color: #60a5fa;
-  border-color: rgba(37, 99, 235, 0.25);
+  border-color: rgba(59, 130, 246, 0.2);
 }
 
 .subtleInProgress {
-  background-color: rgba(255, 138, 0, 0.15);
-  color: #ff9e2c;
-  border-color: rgba(255, 138, 0, 0.25);
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.2);
 }
 
 .subtleInReview {
-  background-color: rgba(16, 185, 129, 0.15);
+  background-color: rgba(16, 185, 129, 0.1);
   color: #34d399;
-  border-color: rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.2);
 }
 
 .subtleDone {
-  background-color: rgba(22, 163, 74, 0.15);
+  background-color: rgba(22, 163, 74, 0.1);
   color: #4ade80;
-  border-color: rgba(22, 163, 74, 0.25);
+  border-color: rgba(22, 163, 74, 0.2);
 }
 
-/* Category Variants matching JERRAA design */
+/* Minimal Category Variants */
 .catUxDesign {
-  background-color: rgba(255, 138, 0, 0.14);
-  color: #ff8a00;
+  background-color: rgba(249, 115, 22, 0.08);
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.18);
 }
 
 .cat3dDesign {
-  background-color: rgba(6, 182, 212, 0.14);
-  color: #06b6d4;
+  background-color: rgba(6, 182, 212, 0.08);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.18);
 }
 
 .catUiDesign {
-  background-color: rgba(236, 72, 153, 0.14);
-  color: #ec4899;
+  background-color: rgba(236, 72, 153, 0.08);
+  color: #f472b6;
+  border-color: rgba(236, 72, 153, 0.18);
 }
 
 .catIllustration {
-  background-color: rgba(168, 85, 247, 0.14);
-  color: #a855f7;
+  background-color: rgba(168, 85, 247, 0.08);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.18);
 }
 
-/* General Color Variants */
+/* General Variants */
 .variantPrimary {
-  background-color: #3b82f6;
-  color: #ffffff;
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
 }
 
 .variantSecondary {
-  background-color: #64748b;
-  color: #ffffff;
+  background-color: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
 }
 
 .variantSuccess {
-  background-color: #10b981;
-  color: #ffffff;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
 }
 
 .variantWarning {
-  background-color: #f59e0b;
-  color: #ffffff;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
 }
 
 .variantDanger {
-  background-color: #ef4444;
-  color: #ffffff;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
 }
 
 .variantInfo {
-  background-color: #0ea5e9;
-  color: #ffffff;
+  background-color: rgba(14, 165, 233, 0.1);
+  color: #38bdf8;
 }
 
 .variantNeutral {
-  background-color: rgba(148, 163, 184, 0.15);
+  background-color: rgba(148, 163, 184, 0.08);
   color: #94a3b8;
-  border-color: rgba(148, 163, 184, 0.2);
+  border-color: rgba(148, 163, 184, 0.15);
 }
 
 .variantOutline {
@@ -152,46 +156,47 @@
   border: 1px solid currentColor;
 }
 
-/* Interactive hover if clickable */
 .clickable {
   cursor: pointer;
 }
 
 .clickable:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+  filter: brightness(1.15);
 }
 
-/* Dot Indicator */
 .dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background-color: currentColor;
   display: inline-block;
 }
 
-/* Light mode adjustments */
-:global(body:not(.dark)) .subtleTodo,
-.badgeLight.subtleTodo {
-  background-color: rgba(37, 99, 235, 0.1);
-  color: #1d4ed8;
+/* Light Theme Adjustments */
+.badgeLight.catUxDesign,
+:global(body:not(.dark)) .catUxDesign {
+  background-color: rgba(249, 115, 22, 0.08);
+  color: #ea580c;
+  border-color: rgba(249, 115, 22, 0.2);
 }
 
-:global(body:not(.dark)) .subtleInProgress,
-.badgeLight.subtleInProgress {
-  background-color: rgba(255, 138, 0, 0.1);
-  color: #c2410c;
+.badgeLight.cat3dDesign,
+:global(body:not(.dark)) .cat3dDesign {
+  background-color: rgba(6, 182, 212, 0.08);
+  color: #0891b2;
+  border-color: rgba(6, 182, 212, 0.2);
 }
 
-:global(body:not(.dark)) .subtleInReview,
-.badgeLight.subtleInReview {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #047857;
+.badgeLight.catUiDesign,
+:global(body:not(.dark)) .catUiDesign {
+  background-color: rgba(236, 72, 153, 0.08);
+  color: #db2777;
+  border-color: rgba(236, 72, 153, 0.2);
 }
 
-:global(body:not(.dark)) .subtleDone,
-.badgeLight.subtleDone {
-  background-color: rgba(22, 163, 74, 0.1);
-  color: #15803d;
+.badgeLight.catIllustration,
+:global(body:not(.dark)) .catIllustration {
+  background-color: rgba(168, 85, 247, 0.08);
+  color: #9333ea;
+  border-color: rgba(168, 85, 247, 0.2);
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Board from './components/Board';
-import { TaskProvider } from './context/TaskContext';
+import { TaskProvider } from './context';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -20,14 +20,14 @@ function App() {
         >
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
-          <div style={styles.content}>
+          <main style={styles.content}>
             <Routes>
               <Route
                 path="/"
                 element={<Board darkMode={darkMode} />}
               />
             </Routes>
-          </div>
+          </main>
         </div>
       </Router>
     </TaskProvider>
@@ -40,23 +40,23 @@ const styles = {
     width: '100%',
     margin: 0,
     padding: 0,
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    transition: 'background 0.3s ease, color 0.3s ease',
+    transition: 'background 0.2s ease, color 0.2s ease',
   },
   content: {
-    padding: '2.5rem 3rem',
+    padding: '2rem 2.5rem',
+    maxWidth: '1600px',
+    margin: '0 auto',
   },
 };
 
 const darkTheme = {
-  background: '#0C0C0E',
-  text: '#EDEDED',
+  background: '#0B0C10',
+  text: '#F8FAFC',
 };
 
 const lightTheme = {
   background: '#F8FAFC',
-  text: '#171717',
+  text: '#0F172A',
 };
 
 export default App;

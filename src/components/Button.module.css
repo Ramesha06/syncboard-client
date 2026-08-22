@@ -2,18 +2,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   font-family: inherit;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   text-decoration: none;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
   box-sizing: border-box;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.15s ease;
   outline: none;
   position: relative;
 }
@@ -25,90 +25,80 @@
 
 /* Sizes */
 .sizeSm {
-  height: 32px;
-  padding: 0 12px;
-  font-size: 0.8rem;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  border-radius: 6px;
+  gap: 4px;
+}
+
+.sizeMd {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 0.82rem;
   border-radius: 8px;
   gap: 6px;
 }
 
-.sizeMd {
-  height: 40px;
-  padding: 0 16px;
-  font-size: 0.88rem;
+.sizeLg {
+  height: 42px;
+  padding: 0 18px;
+  font-size: 0.9rem;
   border-radius: 10px;
   gap: 8px;
 }
 
-.sizeLg {
-  height: 48px;
-  padding: 0 22px;
-  font-size: 0.98rem;
-  border-radius: 14px;
-  gap: 10px;
-}
-
 .sizeIcon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
 .sizeIconSm {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
 }
 
-/* Full Width */
 .fullWidth {
   width: 100%;
 }
 
-/* Variants - Dark Mode Defaults */
+/* Variants - Dark Mode */
 .variantPrimary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: #3b82f6;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
 }
 
 .variantPrimary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-  transform: translateY(-1px);
-}
-
-.variantPrimary:active:not(:disabled) {
-  transform: translateY(0);
+  background: #2563eb;
 }
 
 .variantSecondary {
-  background-color: #1f1f2a;
+  background-color: rgba(255, 255, 255, 0.05);
   color: #e2e8f0;
   border-color: rgba(255, 255, 255, 0.08);
 }
 
 .variantSecondary:hover:not(:disabled) {
-  background-color: #2a2a38;
+  background-color: rgba(255, 255, 255, 0.09);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
 }
 
 .variantOutline {
   background-color: transparent;
-  color: #e2e8f0;
-  border-color: rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .variantOutline:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .variantGhost {
@@ -117,62 +107,58 @@
 }
 
 .variantGhost:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
 }
 
 .variantDanger {
-  background-color: rgba(239, 68, 68, 0.15);
+  background-color: rgba(239, 68, 68, 0.1);
   color: #f87171;
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .variantDanger:hover:not(:disabled) {
   background-color: #ef4444;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
 }
 
 .variantAccent {
-  background: linear-gradient(135deg, #ff8a00 0%, #ea580c 100%);
+  background: #f97316;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(255, 138, 0, 0.25);
 }
 
 .variantAccent:hover:not(:disabled) {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+  background: #ea580c;
 }
 
-/* Add Task Quick Style (Dashed Outline Button for Kanban columns) */
 .variantDashed {
   background-color: transparent;
   color: #94a3b8;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  font-size: 0.78rem;
+  height: 30px;
 }
 
 .variantDashed:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
 }
 
-/* Disabled & Loading States */
+/* Disabled & Loading */
 .btn:disabled,
 .btnDisabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 .loadingSpinner {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: currentColor;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.6s linear infinite;
   display: inline-block;
 }
 
@@ -182,7 +168,7 @@
   }
 }
 
-/* Light Theme Overrides */
+/* Light Theme */
 .btnLight.variantSecondary {
   background-color: #f1f5f9;
   color: #334155;
@@ -195,13 +181,12 @@
 }
 
 .btnLight.variantOutline {
-  color: #475569;
+  color: #64748b;
   border-color: #cbd5e1;
 }
 
 .btnLight.variantOutline:hover:not(:disabled) {
   background-color: #f8fafc;
-  border-color: #94a3b8;
   color: #0f172a;
 }
 
