@@ -2,11 +2,23 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Board from './components/Board';
+import AddTaskForm from './components/AddTaskForm';
 import { TaskProvider } from './context';
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const theme = darkMode ? darkTheme : lightTheme;
+
+  // Add Task modal state: which column triggered it, and whether it's open.
+  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+  const [targetColumnId, setTargetColumnId] = useState('todo');
+
+  // Column's "+" / "+ Add Task" button calls this with the column id.
+  // Passing this in overrides Board's own placeholder random-task stub.
+  const handleAddTask = (columnId) => {
+    setTargetColumnId(columnId);
+    setIsAddTaskOpen(true);
+  };
 
   return (
     <TaskProvider>
@@ -24,10 +36,18 @@ function App() {
             <Routes>
               <Route
                 path="/"
-                element={<Board darkMode={darkMode} />}
+                element={<Board darkMode={darkMode} onAddTask={handleAddTask} />}
               />
             </Routes>
           </main>
+
+          {isAddTaskOpen && (
+            <AddTaskForm
+              onClose={() => setIsAddTaskOpen(false)}
+              darkMode={darkMode}
+              defaultColumnId={targetColumnId}
+            />
+          )}
         </div>
       </Router>
     </TaskProvider>
