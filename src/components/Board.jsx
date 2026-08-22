@@ -1,5 +1,8 @@
 import React from 'react';
 import Column from './Column';
+import Badge from './Badge';
+import Button from './Button';
+import { useTasks } from '../context';
 import styles from './Board.module.css';
 
 /**
@@ -13,16 +16,29 @@ const DEFAULT_COLUMNS = [
 ];
 
 /**
- * Board Component (Member 2 Responsibility - JERRAA Template Layout)
+ * Board Component (JERRAA Template Layout with Global State Integration)
  */
 export default function Board({
   darkMode = true,
   columns = DEFAULT_COLUMNS,
-  tasks = [],
+  tasks: propTasks,
   renderTask,
   onAddTask,
   children,
 }) {
+  const {
+    tasks: contextTasks = [],
+    filteredTasks = [],
+    searchQuery = '',
+    setSearchQuery,
+    addTask: contextAddTask,
+  } = useTasks();
+
+  // Use props tasks if explicitly provided, otherwise use global filtered tasks
+  const activeTasks = propTasks !== undefined ? propTasks : filteredTasks || contextTasks;
+
+  const [activeView, setActiveView] = React.useState('board');
+
   const titleClass = `${styles.title} ${
     darkMode ? styles.titleDark : styles.titleLight
   }`;
@@ -41,24 +57,45 @@ export default function Board({
   const viewToggleClass = `${styles.viewToggle} ${
     darkMode ? styles.viewToggleDark : styles.viewToggleLight
   }`;
-  const toggleActiveBtnClass = `${styles.toggleBtn} ${
-    darkMode ? styles.toggleBtnActiveDark : styles.toggleBtnActiveLight
-  }`;
 
   // Helper to group tasks by column ID
   const getTasksForColumn = (columnId) => {
-    if (Array.isArray(tasks)) {
-      return tasks.filter(
+    if (Array.isArray(activeTasks)) {
+      return activeTasks.filter(
         (task) =>
           task.status === columnId ||
           task.columnId === columnId ||
           task.status?.toLowerCase().replace(' ', '_') === columnId
       );
     }
-    if (tasks && typeof tasks === 'object') {
-      return tasks[columnId] || [];
+    if (activeTasks && typeof activeTasks === 'object') {
+      return activeTasks[columnId] || [];
     }
     return [];
+  };
+
+  const handleAddTaskClick = (columnId) => {
+    if (onAddTask) {
+      onAddTask(columnId);
+      return;
+    }
+
+    const categoryList = ['UX Design', '3D Design', 'UI Design', 'Illustration'];
+    const randomCategory = categoryList[Math.floor(Math.random() * categoryList.length)];
+    const dateStr = new Date().toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+
+    contextAddTask({
+      title: `New ${randomCategory} Task`,
+      description: 'Newly added task item in ' + columnId,
+      category: randomCategory,
+      status: columnId,
+      dueDate: dateStr,
+      assigneeInitials: 'SB',
+    });
   };
 
   return (
@@ -71,7 +108,9 @@ export default function Board({
               <h1 className={titleClass}>RNI Studio Space</h1>
               <span className={styles.caretIcon}>▼</span>
             </div>
-            <p className={subtitleClass}>17 Running Projects</p>
+            <p className={subtitleClass}>
+              {contextTasks.length} Active Tasks & Projects
+            </p>
           </div>
 
           {/* Member Avatar Stack */}
@@ -95,21 +134,32 @@ export default function Board({
             <span>🔍</span>
             <input
               type="text"
-              placeholder="Search tasks..."
+              placeholder="Search tasks or categories..."
               className={searchInputClass}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery && setSearchQuery(e.target.value)}
             />
           </div>
 
           <div className={viewToggleClass}>
-            <button
+            <Button
               type="button"
-              className={`${styles.toggleBtn} ${toggleActiveBtnClass}`}
+              variant={activeView === 'board' ? 'primary' : 'ghost'}
+              size="sm"
+              darkMode={darkMode}
+              onClick={() => setActiveView('board')}
             >
               ⊞ Board
-            </button>
-            <button type="button" className={styles.toggleBtn}>
+            </Button>
+            <Button
+              type="button"
+              variant={activeView === 'list' ? 'primary' : 'ghost'}
+              size="sm"
+              darkMode={darkMode}
+              onClick={() => setActiveView('list')}
+            >
               ≡ List
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -130,7 +180,7 @@ export default function Board({
                 count={colTasks.length}
                 accentColor={col.accentColor}
                 darkMode={darkMode}
-                onAddTask={onAddTask}
+                onAddTask={handleAddTaskClick}
               >
                 {colTasks.map((task, index) =>
                   renderTask ? (
@@ -154,20 +204,9 @@ export default function Board({
 
 /**
  * Task Card Renderer matching JERRAA Template floating card design
+ * Utilizes reusable Badge UI component for category tags
  */
 function DefaultTaskCard({ task, darkMode }) {
-  const tagColorMap = {
-    'UX Design': { bg: 'rgba(255, 138, 0, 0.12)', text: '#FF8A00' },
-    '3D Design': { bg: 'rgba(6, 182, 212, 0.12)', text: '#06B6D4' },
-    'UI Design': { bg: 'rgba(236, 72, 153, 0.12)', text: '#EC4899' },
-    Illustration: { bg: 'rgba(168, 85, 247, 0.12)', text: '#A855F7' },
-  };
-
-  const tagStyle = tagColorMap[task.category] || {
-    bg: 'rgba(99, 102, 241, 0.12)',
-    text: '#6366F1',
-  };
-
   return (
     <div
       style={{
@@ -185,20 +224,15 @@ function DefaultTaskCard({ task, darkMode }) {
         gap: '10px',
       }}
     >
-      {/* Category Pill Tag */}
+      {/* Category Tag using Reusable Badge */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span
-          style={{
-            padding: '4px 12px',
-            borderRadius: '12px',
-            fontSize: '0.74rem',
-            fontWeight: '700',
-            backgroundColor: tagStyle.bg,
-            color: tagStyle.text,
-          }}
-        >
-          {task.category || 'UX Design'}
-        </span>
+        <Badge
+          category={task.category || 'UX Design'}
+          variant="subtle"
+          size="sm"
+          pill
+          darkMode={darkMode}
+        />
         <span style={{ color: '#94A3B8', fontSize: '1rem', cursor: 'pointer' }}>⋮</span>
       </div>
 
@@ -274,3 +308,4 @@ function DefaultTaskCard({ task, darkMode }) {
     </div>
   );
 }
+

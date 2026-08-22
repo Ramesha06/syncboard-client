@@ -1,4 +1,6 @@
 import React from 'react';
+import Badge from './Badge';
+import Button from './Button';
 import styles from './Column.module.css';
 
 /**
@@ -23,22 +25,22 @@ export default function Column({
   const addBtnClass = `${styles.headerAddBtn} ${
     darkMode ? styles.headerAddBtnDark : styles.headerAddBtnLight
   }`;
-  const addTaskBtnClass = `${styles.addTaskBtn} ${
-    darkMode ? styles.addTaskBtnDark : styles.addTaskBtnLight
-  }`;
 
   return (
     <div className={columnClass} data-column-id={id}>
       {/* Column Header */}
       <div className={styles.columnHeader}>
         <div className={styles.headerLeft}>
-          {/* Solid Pill Status Badge */}
-          <div
-            className={styles.statusPill}
-            style={{ backgroundColor: accentColor }}
+          {/* Solid Pill Status Badge using reusable Badge */}
+          <Badge
+            status={id}
+            accentColor={accentColor}
+            size="sm"
+            pill
+            darkMode={darkMode}
           >
             {title}
-          </div>
+          </Badge>
 
           {/* Circle Count Badge */}
           <div
@@ -49,15 +51,18 @@ export default function Column({
           </div>
         </div>
 
-        {/* Top-Right Quick Add Action */}
-        <button
+        {/* Top-Right Quick Add Action using reusable Button */}
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-sm"
           className={addBtnClass}
           onClick={() => onAddTask && onAddTask(id)}
           title={`Add task to ${title}`}
+          darkMode={darkMode}
         >
           +
-        </button>
+        </Button>
       </div>
 
       {/* Column Body & Task Card Slots */}
@@ -70,14 +75,17 @@ export default function Column({
           </div>
         )}
 
-        {/* Bottom Add Task Button Slot */}
-        <button
+        {/* Bottom Add Task Button Slot using reusable Button */}
+        <Button
           type="button"
-          className={addTaskBtnClass}
+          variant="dashed"
+          fullWidth
+          size="sm"
+          darkMode={darkMode}
           onClick={() => onAddTask && onAddTask(id)}
         >
-          <span>+ Add Task</span>
-        </button>
+          + Add Task
+        </Button>
       </div>
     </div>
   );
