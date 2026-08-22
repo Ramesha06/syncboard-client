@@ -1,0 +1,213 @@
+.boardContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sprintHeader {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.headerTitleSection {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.titleDark {
+  color: #FFFFFF;
+}
+
+.titleLight {
+  color: #0F172A;
+}
+
+.caretIcon {
+  font-size: 0.9rem;
+  color: #94A3B8;
+  margin-top: 4px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.subtitleDark {
+  color: #9CA3AF;
+}
+
+.subtitleLight {
+  color: #64748B;
+}
+
+.avatarStack {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.avatarItem {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  margin-left: -10px;
+  border: 2.5px solid #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.avatarLight {
+  border-color: #FFFFFF;
+}
+
+.avatarMore {
+  background: #0F172A;
+  color: #FFFFFF;
+  font-size: 0.68rem;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 12px;
+  width: 260px;
+  transition: all 0.2s ease;
+}
+
+.searchBarDark {
+  background: #181820;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #F8FAFC;
+}
+
+.searchBarLight {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+}
+
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.86rem;
+  width: 100%;
+}
+
+.searchInputDark {
+  color: #FFFFFF;
+}
+
+.searchInputDark::placeholder {
+  color: #64748B;
+}
+
+.searchInputLight {
+  color: #0F172A;
+}
+
+.searchInputLight::placeholder {
+  color: #94A3B8;
+}
+
+.viewToggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.viewToggleDark {
+  background: #181820;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.viewToggleLight {
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+}
+
+.toggleBtn {
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #94A3B8;
+  transition: all 0.2s ease;
+}
+
+.toggleBtnActiveDark {
+  background: #272732;
+  color: #FFFFFF;
+}
+
+.toggleBtnActiveLight {
+  background: #FFFFFF;
+  color: #0F172A;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.columnsWrapper {
+  display: flex;
+  gap: 1.4rem;
+  overflow-x: auto;
+  padding-bottom: 1.8rem;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.columnsWrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.columnsWrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.columnsWrapper::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.25);
+  border-radius: 10px;
+}
