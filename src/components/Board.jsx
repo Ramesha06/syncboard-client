@@ -3,6 +3,7 @@ import Column from './Column';
 import Badge from './Badge';
 import { useTasks } from '../context';
 import styles from './Board.module.css';
+import TaskCard from './TaskCard'
 
 /**
  * Default JERRAA Template Columns Definition
@@ -38,24 +39,18 @@ export default function Board({
 
   const [activeView, setActiveView] = React.useState('board');
 
-  const titleClass = `${styles.title} ${
-    darkMode ? styles.titleDark : styles.titleLight
-  }`;
-  const subtitleClass = `${styles.subtitle} ${
-    darkMode ? styles.subtitleDark : styles.subtitleLight
-  }`;
-  const avatarClass = `${styles.avatarItem} ${
-    !darkMode ? styles.avatarLight : ''
-  }`;
-  const searchBarClass = `${styles.searchBar} ${
-    darkMode ? styles.searchBarDark : styles.searchBarLight
-  }`;
-  const searchInputClass = `${styles.searchInput} ${
-    darkMode ? styles.searchInputDark : styles.searchInputLight
-  }`;
-  const viewToggleClass = `${styles.viewToggle} ${
-    darkMode ? styles.viewToggleDark : styles.viewToggleLight
-  }`;
+  const titleClass = `${styles.title} ${darkMode ? styles.titleDark : styles.titleLight
+    }`;
+  const subtitleClass = `${styles.subtitle} ${darkMode ? styles.subtitleDark : styles.subtitleLight
+    }`;
+  const avatarClass = `${styles.avatarItem} ${!darkMode ? styles.avatarLight : ''
+    }`;
+  const searchBarClass = `${styles.searchBar} ${darkMode ? styles.searchBarDark : styles.searchBarLight
+    }`;
+  const searchInputClass = `${styles.searchInput} ${darkMode ? styles.searchInputDark : styles.searchInputLight
+    }`;
+  const viewToggleClass = `${styles.viewToggle} ${darkMode ? styles.viewToggleDark : styles.viewToggleLight
+    }`;
 
   // Helper to group tasks by column ID
   const getTasksForColumn = (columnId) => {
@@ -142,26 +137,24 @@ export default function Board({
           <div className={viewToggleClass}>
             <button
               type="button"
-              className={`${styles.toggleBtn} ${
-                activeView === 'board'
-                  ? darkMode
-                    ? styles.toggleBtnActiveDark
-                    : styles.toggleBtnActiveLight
-                  : ''
-              }`}
+              className={`${styles.toggleBtn} ${activeView === 'board'
+                ? darkMode
+                  ? styles.toggleBtnActiveDark
+                  : styles.toggleBtnActiveLight
+                : ''
+                }`}
               onClick={() => setActiveView('board')}
             >
               Board
             </button>
             <button
               type="button"
-              className={`${styles.toggleBtn} ${
-                activeView === 'list'
-                  ? darkMode
-                    ? styles.toggleBtnActiveDark
-                    : styles.toggleBtnActiveLight
-                  : ''
-              }`}
+              className={`${styles.toggleBtn} ${activeView === 'list'
+                ? darkMode
+                  ? styles.toggleBtnActiveDark
+                  : styles.toggleBtnActiveLight
+                : ''
+                }`}
               onClick={() => setActiveView('list')}
             >
               List
