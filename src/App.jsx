@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import BoardPage from './pages/BoardPage';
 import TaskDetailPage from './pages/TaskDetailPage';
+import IssuesPage from './pages/IssuesPage';
+import TimelinePage from './pages/TimelinePage';
+import SettingsPage from './pages/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TaskProvider } from './context';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -23,6 +26,9 @@ function AppLayout() {
         <Routes>
           <Route path="/" element={<BoardPage />} />
           <Route path="/tasks/:id" element={<TaskDetailPage />} />
+          <Route path="/issues" element={<IssuesPage />} />
+          <Route path="/timeline" element={<TimelinePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

@@ -1,6 +1,8 @@
 # SyncBoard — Task Management Client
 
-A Jira-style Kanban board built with React and Vite for managing project tasks across team members.
+A Jira-style Kanban board built with React and Vite for managing project tasks across team members. This is the front-end skeleton for Assignment 01, running entirely on mock data with a clean component architecture and an API layer ready for the Express server.
+
+**Group 96**
 
 ## Getting Started
 
@@ -33,11 +35,11 @@ npm run preview
 src/
 ├── api/            # All fetch calls (taskApi.js) — components never fetch directly
 ├── components/     # Reusable presentational components (Button, TaskCard, Column, Board, etc.)
-├── constants/      # Shared constants (column definitions)
+├── constants/      # Shared constants (column definitions, nav theme)
 ├── context/        # Context providers (TaskContext, ThemeContext) and hooks
 ├── data/           # Mock data (mockTasks.js) — stand-in for the database
 ├── hooks/          # Custom hooks (useTasks)
-├── pages/          # One component per route (BoardPage, TaskDetailPage, NotFoundPage)
+├── pages/          # One component per route (BoardPage, TaskDetailPage, NotFoundPage, etc.)
 └── utils/          # Pure helper functions (validation, date formatting, filters)
 ```
 
@@ -58,14 +60,23 @@ src/
 - **Filter & Search** — Filter by assignee or status, search by title, empty state when nothing matches
 - **Theme Toggle** — Dark/light mode via ThemeContext
 - **Four UI States** — Loading spinner, error banner, empty state, and success (board) all handled
+- **Issues View** — Table listing of all tasks
+- **Timeline View** — Tasks ordered by due date
+- **Settings Page** — Theme preferences
 
-## Team Contributions
+## Team Contributions — Group 96
 
-| Member   | Area                                      |
-|----------|-------------------------------------------|
-| Ramesha  | Project setup, Board and Column components|
-| Gimhan   | React frontend skeleton, routing, context |
-| Kavindu  | Backend API integration                   |
+| Member | Student ID | Contribution |
+|--------|-----------|--------------|
+| RRP Weerasinghe | 30851 | Project setup, React Router and navigation UI |
+| ALD Semitha | 30789 | Board and column layout UI |
+| ATN Fernando | 30966 | TaskCard UI and mock data setup |
+| PKPGSD Gunarathna | 29921 | Add Task Form UI and validation logic |
+| MS Liyanaaracchi | 30860 | Move/Delete buttons and confirmation modal UI |
+| MHF Zaina | 33211 | Search bar and filter dropdowns UI |
+| DMSK Dissanayake | 33337 | Loading spinner, error banner, and empty state UI |
+| PSD Wijesinghe | 30843 | Global state (useReducer) and reusable Badge/Button UI |
+| KGG Theekshana | 30751 | Pages, routing, context integration, deployment, and overall assembly |
 
 ## Known Limitations
 

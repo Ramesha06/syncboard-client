@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Button from './Button';
 import { useTheme } from '../context/ThemeContext';
 import { darkNavTheme, lightNavTheme } from '../constants/navTheme';
 
+const NAV_LINKS = [
+  { to: '/', label: 'Board' },
+  { to: '/issues', label: 'Issues' },
+  { to: '/timeline', label: 'Timeline' },
+  { to: '/settings', label: 'Settings' },
+];
+
 export default function Navbar() {
   const { darkMode, toggleTheme } = useTheme();
+  const { pathname } = useLocation();
   const theme = darkMode ? darkNavTheme : lightNavTheme;
 
   return (
@@ -38,12 +46,18 @@ export default function Navbar() {
       </div>
 
       <div style={styles.linksContainer}>
-        <Link to="/" style={{ ...styles.link, color: theme.activeText, backgroundColor: theme.activeLinkBg }}>
-          Board
-        </Link>
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Issues</Link>
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Timeline</Link>
-        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Settings</Link>
+        {NAV_LINKS.map(({ to, label }) => {
+          const isActive = to === '/' ? pathname === '/' : pathname.startsWith(to);
+          return (
+            <Link key={to} to={to} style={{
+              ...styles.link,
+              color: isActive ? theme.activeText : theme.mutedText,
+              backgroundColor: isActive ? theme.activeLinkBg : 'transparent',
+            }}>
+              {label}
+            </Link>
+          );
+        })}
       </div>
 
       <div style={styles.rightSection}>
