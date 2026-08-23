@@ -1,16 +1,83 @@
-# React + Vite
+# SyncBoard — Task Management Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Jira-style Kanban board built with React and Vite for managing project tasks across team members.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Prerequisites
+- Node.js 18+
+- npm 9+
 
-## React Compiler
+### Installation
+```bash
+git clone https://github.com/Ramesha06/syncboard-client.git
+cd syncboard-client
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Run Development Server
+```bash
+npm run dev
+```
+Opens at `http://localhost:5173` by default.
 
-## Expanding the ESLint configuration
+### Build for Production
+```bash
+npm run build
+npm run preview
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Folder Structure
+
+```
+src/
+├── api/            # All fetch calls (taskApi.js) — components never fetch directly
+├── components/     # Reusable presentational components (Button, TaskCard, Column, Board, etc.)
+├── constants/      # Shared constants (column definitions)
+├── context/        # Context providers (TaskContext, ThemeContext) and hooks
+├── data/           # Mock data (mockTasks.js) — stand-in for the database
+├── hooks/          # Custom hooks (useTasks)
+├── pages/          # One component per route (BoardPage, TaskDetailPage, NotFoundPage)
+└── utils/          # Pure helper functions (validation, date formatting, filters)
+```
+
+### Conventions
+- One component per file, named to match
+- Shared state lives in Context providers, not prop drilling
+- Task state managed with useReducer (add, move, delete actions)
+- API calls go in `src/api/`, never inside components
+- Navigation uses React Router `<Link>`, not `<a>` tags
+
+## Features
+
+- **Kanban Board** — Three columns (To Do, In Progress, Done) with per-column task counts
+- **Create Tasks** — Controlled form with validation (title required, min 3 characters, due date not in past)
+- **Move Tasks** — Left/right buttons to shift tasks between columns
+- **Delete Tasks** — With confirmation dialog before removal
+- **Task Detail** — Deep-linkable `/tasks/:id` route with not-found handling
+- **Filter & Search** — Filter by assignee or status, search by title, empty state when nothing matches
+- **Theme Toggle** — Dark/light mode via ThemeContext
+- **Four UI States** — Loading spinner, error banner, empty state, and success (board) all handled
+
+## Team Contributions
+
+| Member   | Area                                      |
+|----------|-------------------------------------------|
+| Ramesha  | Project setup, Board and Column components|
+| Gimhan   | React frontend skeleton, routing, context |
+| Kavindu  | Backend API integration                   |
+
+## Known Limitations
+
+- Data is stored in-memory (mock data) — refreshing the page resets all changes
+- No backend API connected yet — `src/api/taskApi.js` is prepared but not wired up
+- Filter dropdowns use client-side filtering only
+- No drag-and-drop support (tasks move via left/right buttons)
+- No user authentication
+
+## Tech Stack
+
+- React 19
+- Vite 8
+- React Router 7
+- CSS Modules

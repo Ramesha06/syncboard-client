@@ -1,4 +1,6 @@
-export default function ErrorBanner({ message, onRetry }) {
+import Button from './Button';
+
+export default function ErrorBanner({ message, onRetry, darkMode }) {
   if (!message) return null;
 
   return (
@@ -8,9 +10,9 @@ export default function ErrorBanner({ message, onRetry }) {
         <span className="error-message">{message}</span>
       </div>
       {onRetry && (
-        <button type="button" className="error-retry-btn" onClick={onRetry}>
+        <Button variant="secondary" size="sm" darkMode={darkMode} onClick={onRetry}>
           Try Again
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -10,6 +10,5 @@
 export const DEFAULT_COLUMNS = [
     { id: 'todo', title: 'To Do', accentColor: '#3B82F6' },
     { id: 'in_progress', title: 'In Progress', accentColor: '#F97316' },
-    { id: 'in_review', title: 'Submitted', accentColor: '#10B981' },
     { id: 'done', title: 'Done', accentColor: '#22C55E' },
 ];

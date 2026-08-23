@@ -49,14 +49,16 @@ export default function Column({
         </div>
 
         {/* Top-Right Quick Add Action */}
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          darkMode={darkMode}
           className={addBtnClass}
           onClick={() => onAddTask && onAddTask(id)}
-          title={`Add task to ${title}`}
+          aria-label={`Add task to ${title}`}
         >
           +
-        </button>
+        </Button>
       </div>
 
       {/* Column Body & Task Card Slots */}

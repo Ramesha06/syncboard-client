@@ -1,4 +1,6 @@
-export default function SearchBar({ searchQuery, onSearchChange }) {
+import Button from './Button';
+
+export default function SearchBar({ searchQuery, onSearchChange, darkMode }) {
   return (
     <div className="search-bar">
       <input
@@ -9,13 +11,9 @@ export default function SearchBar({ searchQuery, onSearchChange }) {
         className="search-input"
       />
       {searchQuery && (
-        <button
-          type="button"
-          className="clear-btn"
-          onClick={() => onSearchChange('')}
-        >
+        <Button variant="ghost" size="sm" darkMode={darkMode} onClick={() => onSearchChange('')}>
           Clear
-        </button>
+        </Button>
       )}
     </div>
   );

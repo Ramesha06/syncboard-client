@@ -1,5 +1,6 @@
 import React from 'react';
 import Column from './Column';
+import Button from './Button';
 import { useTasks } from '../context';
 import { DEFAULT_COLUMNS } from '../constants/columns';
 import styles from './Board.module.css';
@@ -92,7 +93,7 @@ export default function Board({
               <h1 className={titleClass}>RNI Studio Space</h1>
             </div>
             <p className={subtitleClass}>
-              {contextTasks.length} Active Tasks & Projects
+              {contextTasks.filter(t => t.status === 'done').length} of {contextTasks.length} done
             </p>
           </div>
 
@@ -125,8 +126,10 @@ export default function Board({
           </div>
 
           <div className={viewToggleClass}>
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
+              darkMode={darkMode}
               className={`${styles.toggleBtn} ${activeView === 'board'
                 ? darkMode
                   ? styles.toggleBtnActiveDark
@@ -136,9 +139,11 @@ export default function Board({
               onClick={() => setActiveView('board')}
             >
               Board
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              darkMode={darkMode}
               className={`${styles.toggleBtn} ${activeView === 'list'
                 ? darkMode
                   ? styles.toggleBtnActiveDark
@@ -148,7 +153,7 @@ export default function Board({
               onClick={() => setActiveView('list')}
             >
               List
-            </button>
+            </Button>
           </div>
         </div>
       </div>

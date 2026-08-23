@@ -27,7 +27,7 @@ export default function FilterDropdowns({
       >
         <option value="">All Statuses</option>
         <option value="todo">To Do</option>
-        <option value="doing">In Progress</option>
+        <option value="in_progress">In Progress</option>
         <option value="done">Done</option>
       </select>
     </div>

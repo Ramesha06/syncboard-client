@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import Button from './Button';
+import { useTheme } from '../context/ThemeContext';
 
-export default function Navbar({ darkMode, setDarkMode }) {
+export default function Navbar() {
+  const { darkMode, toggleTheme } = useTheme();
   const theme = darkMode ? darkTheme : lightTheme;
 
   return (
@@ -14,7 +17,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
         WebkitBackdropFilter: 'blur(16px)',
       }}
     >
-      {/* Brand Logo */}
       <div style={styles.logoContainer}>
         <div
           style={{
@@ -50,7 +52,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
         </span>
       </div>
 
-      {/* Navigation */}
       <div style={styles.linksContainer}>
         <Link
           to="/"
@@ -94,23 +95,17 @@ export default function Navbar({ darkMode, setDarkMode }) {
         </Link>
       </div>
 
-      {/* Right Controls */}
       <div style={styles.rightSection}>
-        {/* Theme Toggle */}
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          style={{
-            ...styles.themeButton,
-            backgroundColor: theme.toggleBackground,
-            border: `1px solid ${theme.border}`,
-            color: theme.toggleText,
-          }}
-          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          darkMode={darkMode}
+          onClick={toggleTheme}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         >
           {darkMode ? '☀️' : '🌙'}
-        </button>
+        </Button>
 
-        {/* User Avatar */}
         <div
           style={{
             ...styles.avatar,
@@ -182,18 +177,6 @@ const styles = {
     gap: '10px',
     justifyContent: 'flex-end',
     minWidth: '150px',
-  },
-
-  themeButton: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    fontSize: '13px',
-    transition: 'all 0.15s ease',
   },
 
   avatar: {

@@ -1,56 +1,44 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Board from './components/Board';
-import AddTaskForm from './components/AddTaskForm';
+import BoardPage from './pages/BoardPage';
+import TaskDetailPage from './pages/TaskDetailPage';
+import NotFoundPage from './pages/NotFoundPage';
 import { TaskProvider } from './context';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
-function App() {
-  const [darkMode, setDarkMode] = useState(true);
-  const theme = darkMode ? darkTheme : lightTheme;
-
-  // Add Task modal state: which column triggered it, and whether it's open.
-  const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-  const [targetColumnId, setTargetColumnId] = useState('todo');
-
-  // Column's "+" / "+ Add Task" button calls this with the column id.
-  // Passing this in overrides Board's own placeholder random-task stub.
-  const handleAddTask = (columnId) => {
-    setTargetColumnId(columnId);
-    setIsAddTaskOpen(true);
-  };
+function AppLayout() {
+  const { darkMode, theme } = useTheme();
 
   return (
-    <TaskProvider>
-      <Router basename={import.meta.env.BASE_URL}>
-        <div
-          style={{
-            ...styles.app,
-            background: theme.background,
-            color: theme.text,
-          }}
-        >
-          <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+    <div
+      style={{
+        ...styles.app,
+        background: theme.background,
+        color: theme.text,
+      }}
+    >
+      <Navbar />
 
-          <main style={styles.content}>
-            <Routes>
-              <Route
-                path="/"
-                element={<Board darkMode={darkMode} onAddTask={handleAddTask} />}
-              />
-            </Routes>
-          </main>
+      <main style={styles.content}>
+        <Routes>
+          <Route path="/" element={<BoardPage />} />
+          <Route path="/tasks/:id" element={<TaskDetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
 
-          {isAddTaskOpen && (
-            <AddTaskForm
-              onClose={() => setIsAddTaskOpen(false)}
-              darkMode={darkMode}
-              defaultColumnId={targetColumnId}
-            />
-          )}
-        </div>
-      </Router>
-    </TaskProvider>
+function App() {
+  return (
+    <ThemeProvider>
+      <TaskProvider>
+        <Router basename={import.meta.env.BASE_URL}>
+          <AppLayout />
+        </Router>
+      </TaskProvider>
+    </ThemeProvider>
   );
 }
 
@@ -67,16 +55,6 @@ const styles = {
     maxWidth: '1600px',
     margin: '0 auto',
   },
-};
-
-const darkTheme = {
-  background: '#0B0C10',
-  text: '#F8FAFC',
-};
-
-const lightTheme = {
-  background: '#F8FAFC',
-  text: '#0F172A',
 };
 
 export default App;

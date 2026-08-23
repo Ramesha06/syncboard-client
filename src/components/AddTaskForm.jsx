@@ -132,14 +132,16 @@ export default function AddTaskForm({
                     <h2 id="add-task-heading" className={styles.heading}>
                         Add Task
                     </h2>
-                    <button
-                        type="button"
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        darkMode={darkMode}
                         className={styles.closeBtn}
                         onClick={onClose}
                         aria-label="Close add task form"
                     >
                         ×
-                    </button>
+                    </Button>
                 </div>
 
                 <form onSubmit={handleSubmit} noValidate>

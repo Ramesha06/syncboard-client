@@ -1,5 +1,6 @@
 import SearchBar from './SearchBar';
 import FilterDropdowns from './FilterDropdowns';
+import Button from './Button';
 
 export default function TaskFilterBar({
   searchQuery,
@@ -10,6 +11,7 @@ export default function TaskFilterBar({
   onStatusChange,
   onResetFilters,
   assignees,
+  darkMode,
 }) {
   const hasActiveFilters = searchQuery || selectedAssignee || selectedStatus;
 
@@ -18,6 +20,7 @@ export default function TaskFilterBar({
       <SearchBar
         searchQuery={searchQuery}
         onSearchChange={onSearchChange}
+        darkMode={darkMode}
       />
       <FilterDropdowns
         selectedAssignee={selectedAssignee}
@@ -27,13 +30,14 @@ export default function TaskFilterBar({
         assignees={assignees}
       />
       {hasActiveFilters && (
-        <button
-          type="button"
+        <Button
+          variant="secondary"
+          size="sm"
+          darkMode={darkMode}
           onClick={onResetFilters}
-          className="btn-reset"
         >
           Reset Filters
-        </button>
+        </Button>
       )}
     </div>
   );

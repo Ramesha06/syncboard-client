@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Badge from './Badge';
 import Button from './Button';
 import ConfirmModal from './ConfirmModal';
@@ -54,7 +55,9 @@ export default function TaskCard({ task, darkMode = true }) {
 
             {/* Task Title */}
             <h3 className={`${styles.taskTitle} ${darkMode ? styles.taskTitleDark : styles.taskTitleLight}`}>
-                {task.title || task.text || 'Untitled task'}
+                <Link to={`/tasks/${task.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                    {task.title || task.text || 'Untitled task'}
+                </Link>
             </h3>
 
             {/* Task Subtitle / Details */}
