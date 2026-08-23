@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import Button from './Button';
 import { useTheme } from '../context/ThemeContext';
+import { darkNavTheme, lightNavTheme } from '../constants/navTheme';
 
 export default function Navbar() {
   const { darkMode, toggleTheme } = useTheme();
-  const theme = darkMode ? darkTheme : lightTheme;
+  const theme = darkMode ? darkNavTheme : lightNavTheme;
 
   return (
     <nav
@@ -25,95 +26,35 @@ export default function Navbar() {
             border: `1px solid ${theme.logoBorder}`,
           }}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#3B82F6"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="4" />
             <path d="M9 3v18" />
             <path d="M15 9h6" />
             <path d="M15 15h6" />
           </svg>
         </div>
-
-        <span
-          style={{
-            ...styles.logoText,
-            color: theme.heading,
-          }}
-        >
-          SyncBoard
-        </span>
+        <span style={{ ...styles.logoText, color: theme.heading }}>SyncBoard</span>
       </div>
 
       <div style={styles.linksContainer}>
-        <Link
-          to="/"
-          style={{
-            ...styles.link,
-            color: theme.activeText,
-            backgroundColor: theme.activeLinkBg,
-          }}
-        >
+        <Link to="/" style={{ ...styles.link, color: theme.activeText, backgroundColor: theme.activeLinkBg }}>
           Board
         </Link>
-
-        <Link
-          to="#"
-          style={{
-            ...styles.link,
-            color: theme.mutedText,
-          }}
-        >
-          Issues
-        </Link>
-
-        <Link
-          to="#"
-          style={{
-            ...styles.link,
-            color: theme.mutedText,
-          }}
-        >
-          Timeline
-        </Link>
-
-        <Link
-          to="#"
-          style={{
-            ...styles.link,
-            color: theme.mutedText,
-          }}
-        >
-          Settings
-        </Link>
+        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Issues</Link>
+        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Timeline</Link>
+        <Link to="#" style={{ ...styles.link, color: theme.mutedText }}>Settings</Link>
       </div>
 
       <div style={styles.rightSection}>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          darkMode={darkMode}
-          onClick={toggleTheme}
-          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
+        <Button variant="ghost" size="icon-sm" darkMode={darkMode} onClick={toggleTheme}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
           {darkMode ? '☀️' : '🌙'}
         </Button>
-
-        <div
-          style={{
-            ...styles.avatar,
-            background: theme.avatarBg,
-            border: `1px solid ${theme.avatarBorder}`,
-            color: theme.avatarText,
-          }}
-        >
+        <div style={{
+          ...styles.avatar, background: theme.avatarBg,
+          border: `1px solid ${theme.avatarBorder}`, color: theme.avatarText,
+        }}>
           RW
         </div>
       </div>
@@ -123,104 +64,28 @@ export default function Navbar() {
 
 const styles = {
   nav: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0 2rem',
-    height: '58px',
-    position: 'sticky',
-    top: 0,
-    zIndex: 50,
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    padding: '0 2rem', height: '58px', position: 'sticky', top: 0, zIndex: 50,
     transition: 'background 0.2s ease, border-color 0.2s ease',
   },
-
-  logoContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '9px',
-    minWidth: '150px',
-  },
-
+  logoContainer: { display: 'flex', alignItems: 'center', gap: '9px', minWidth: '150px' },
   logoIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '30px',
-    height: '30px',
-    borderRadius: '8px',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: '30px', height: '30px', borderRadius: '8px',
   },
-
-  logoText: {
-    fontSize: '0.96rem',
-    fontWeight: '700',
-    letterSpacing: '-0.3px',
-  },
-
-  linksContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-  },
-
+  logoText: { fontSize: '0.96rem', fontWeight: '700', letterSpacing: '-0.3px' },
+  linksContainer: { display: 'flex', alignItems: 'center', gap: '6px' },
   link: {
-    textDecoration: 'none',
-    fontSize: '0.84rem',
-    fontWeight: '500',
-    padding: '5px 12px',
-    borderRadius: '6px',
-    transition: 'all 0.15s ease',
+    textDecoration: 'none', fontSize: '0.84rem', fontWeight: '500',
+    padding: '5px 12px', borderRadius: '6px', transition: 'all 0.15s ease',
   },
-
   rightSection: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    justifyContent: 'flex-end',
-    minWidth: '150px',
+    display: 'flex', alignItems: 'center', gap: '10px',
+    justifyContent: 'flex-end', minWidth: '150px',
   },
-
   avatar: {
-    width: '30px',
-    height: '30px',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '0.72rem',
-    fontWeight: '600',
+    width: '30px', height: '30px', borderRadius: '50%',
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
+    fontSize: '0.72rem', fontWeight: '600',
   },
-};
-
-const darkTheme = {
-  navBackground: 'rgba(13, 14, 20, 0.88)',
-  text: '#E2E8F0',
-  heading: '#F8FAFC',
-  activeText: '#F8FAFC',
-  activeLinkBg: 'rgba(255, 255, 255, 0.08)',
-  mutedText: '#94A3B8',
-  border: 'rgba(255, 255, 255, 0.06)',
-  logoBackground: 'rgba(59, 130, 246, 0.12)',
-  logoBorder: 'rgba(59, 130, 246, 0.25)',
-  toggleBackground: 'rgba(255, 255, 255, 0.04)',
-  toggleText: '#F8FAFC',
-  avatarBg: 'rgba(59, 130, 246, 0.2)',
-  avatarBorder: 'rgba(59, 130, 246, 0.4)',
-  avatarText: '#93C5FD',
-};
-
-const lightTheme = {
-  navBackground: 'rgba(255, 255, 255, 0.92)',
-  text: '#1E293B',
-  heading: '#0F172A',
-  activeText: '#0F172A',
-  activeLinkBg: '#F1F5F9',
-  mutedText: '#64748B',
-  border: '#E2E8F0',
-  logoBackground: 'rgba(59, 130, 246, 0.08)',
-  logoBorder: 'rgba(59, 130, 246, 0.2)',
-  toggleBackground: '#F8FAFC',
-  toggleText: '#475569',
-  avatarBg: '#EFF6FF',
-  avatarBorder: '#BFDBFE',
-  avatarText: '#2563EB',
 };

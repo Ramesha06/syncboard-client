@@ -11,11 +11,10 @@ import { useTheme } from '../context/ThemeContext';
 
 export default function BoardPage() {
   const { darkMode } = useTheme();
-  const { tasks, loading, error, setLoading, setError, setTasks } = useTasks();
+  const { tasks, loading, error, setLoading, setError, addTask } = useTasks();
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState('todo');
   const [initialLoad, setInitialLoad] = useState(true);
-
   const [selectedAssignee, setSelectedAssignee] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,7 +39,9 @@ export default function BoardPage() {
     setInitialLoad(true);
   };
 
-  const assignees = [...new Set(tasks.map((t) => t.assignee || t.assigneeInitials).filter(Boolean))];
+  const assignees = [...new Set(
+    tasks.map((t) => t.assignee || t.assigneeInitials).filter(Boolean)
+  )];
 
   const filteredTasks = tasks.filter((task) => {
     const matchesAssignee = !selectedAssignee ||
@@ -54,6 +55,7 @@ export default function BoardPage() {
     return matchesAssignee && matchesStatus && matchesSearch;
   });
 
+  const doneCount = tasks.filter((t) => t.status === 'done').length;
   const hasActiveFilters = selectedAssignee || selectedStatus || searchQuery;
 
   const resetFilters = () => {
@@ -62,48 +64,31 @@ export default function BoardPage() {
     setSearchQuery('');
   };
 
-  if (loading) {
-    return <Spinner message="Loading board..." />;
-  }
+  if (loading) return <Spinner message="Loading board..." />;
 
-  if (error) {
-    return <ErrorBanner message={error} onRetry={handleRetry} darkMode={darkMode} />;
-  }
+  if (error) return <ErrorBanner message={error} onRetry={handleRetry} darkMode={darkMode} />;
 
   if (tasks.length === 0) {
     return (
-      <EmptyState
-        title="No tasks yet"
-        description="Create your first task to get started."
-        actionLabel="Add Task"
-        onAction={() => handleAddTask('todo')}
-        darkMode={darkMode}
-      />
+      <EmptyState title="No tasks yet" description="Create your first task to get started."
+        actionLabel="Add Task" onAction={() => handleAddTask('todo')} darkMode={darkMode} />
     );
   }
 
   return (
     <>
-      <div style={styles.filterBar}>
-        <input
-          type="text"
-          placeholder="Search tasks by title..."
-          value={searchQuery}
+      <div style={filterBarStyle}>
+        <input type="text" placeholder="Search tasks by title..." value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
-            ...styles.searchInput,
+            ...searchInputStyle,
             background: darkMode ? 'rgba(255,255,255,0.04)' : '#F1F5F9',
             color: darkMode ? '#F8FAFC' : '#0F172A',
             border: `1px solid ${darkMode ? 'rgba(255,255,255,0.08)' : '#E2E8F0'}`,
           }}
         />
-        <FilterDropdowns
-          selectedAssignee={selectedAssignee}
-          selectedStatus={selectedStatus}
-          onAssigneeChange={setSelectedAssignee}
-          onStatusChange={setSelectedStatus}
-          assignees={assignees}
-        />
+        <FilterDropdowns selectedAssignee={selectedAssignee} selectedStatus={selectedStatus}
+          onAssigneeChange={setSelectedAssignee} onStatusChange={setSelectedStatus} assignees={assignees} />
         {hasActiveFilters && (
           <Button variant="secondary" size="sm" darkMode={darkMode} onClick={resetFilters}>
             Reset Filters
@@ -112,41 +97,27 @@ export default function BoardPage() {
       </div>
 
       {filteredTasks.length === 0 ? (
-        <EmptyState
-          title="No matching tasks"
-          description="Try adjusting your filters or search query."
-          actionLabel="Reset Filters"
-          onAction={resetFilters}
-          darkMode={darkMode}
-        />
+        <EmptyState title="No matching tasks" description="Try adjusting your filters or search query."
+          actionLabel="Reset Filters" onAction={resetFilters} darkMode={darkMode} />
       ) : (
-        <Board darkMode={darkMode} onAddTask={handleAddTask} tasks={filteredTasks} />
+        <Board darkMode={darkMode} tasks={filteredTasks} doneCount={doneCount}
+          totalCount={tasks.length} onAddTask={handleAddTask} />
       )}
 
       {isAddTaskOpen && (
-        <AddTaskForm
-          onClose={() => setIsAddTaskOpen(false)}
-          darkMode={darkMode}
-          defaultColumnId={targetColumnId}
-        />
+        <AddTaskForm onClose={() => setIsAddTaskOpen(false)} onSubmit={addTask}
+          darkMode={darkMode} defaultColumnId={targetColumnId} />
       )}
     </>
   );
 }
 
-const styles = {
-  filterBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.75rem',
-    marginBottom: '1.25rem',
-    flexWrap: 'wrap',
-  },
-  searchInput: {
-    padding: '6px 12px',
-    borderRadius: '8px',
-    fontSize: '0.85rem',
-    outline: 'none',
-    width: '220px',
-  },
+const filterBarStyle = {
+  display: 'flex', alignItems: 'center', gap: '0.75rem',
+  marginBottom: '1.25rem', flexWrap: 'wrap',
+};
+
+const searchInputStyle = {
+  padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem',
+  outline: 'none', width: '220px',
 };
