@@ -2,8 +2,11 @@ import express from 'express';
 import * as taskController from '../controllers/taskController.js';
 import validate from '../middlewares/validate.js';
 import { createTaskSchema, updateTaskSchema } from '../validations/taskValidation.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
+
+router.use(authMiddleware); // applies to every route below
 
 router.get('/', taskController.getTasks);
 router.get('/:id', taskController.getTaskById);
