@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import healthRoutes from './src/routes/healthRoutes.js';
+import notFoundHandler from './src/middlewares/notFoundHandler.js';
+import errorHandler from './src/middlewares/errorHandler.js';
 
 const app = express();
 
@@ -10,5 +12,9 @@ app.use(express.json());
 
 // Routes
 app.use('/api/health', healthRoutes);
+
+// Error Handling Middlewares (Must be added after all routes)
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;
