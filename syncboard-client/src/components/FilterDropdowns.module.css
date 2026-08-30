@@ -1,0 +1,134 @@
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.searchIconSvg {
+  width: 14px;
+  height: 14px;
+}
+
+.searchInput {
+  padding: 7px 10px 7px 32px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  outline: none;
+  width: 210px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.searchInputDark {
+  background: rgba(255, 255, 255, 0.04);
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.searchInputDark:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.searchInputDark::placeholder {
+  color: #64748B;
+}
+
+.searchInputLight {
+  background: #F1F5F9;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+}
+
+.searchInputLight:focus {
+  border-color: #3B82F6;
+  background: #FFFFFF;
+}
+
+.searchInputLight::placeholder {
+  color: #94A3B8;
+}
+
+.select {
+  padding: 7px 28px 7px 10px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.selectDark {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%2394A3B8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.selectDark:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.selectDark option {
+  background: #1E293B;
+  color: #F8FAFC;
+}
+
+.selectLight {
+  background-color: #F1F5F9;
+  color: #0F172A;
+  border: 1px solid #E2E8F0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+.selectLight:focus {
+  border-color: #3B82F6;
+  background-color: #FFFFFF;
+}
+
+.resetBtn {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.resetBtnDark {
+  background: rgba(239, 68, 68, 0.12);
+  color: #FCA5A5;
+}
+
+.resetBtnDark:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.resetBtnLight {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.resetBtnLight:hover {
+  background: #FECACA;
+}
