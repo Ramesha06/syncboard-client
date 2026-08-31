@@ -102,6 +102,8 @@ What I added in this branch:
 - `postman/SyncBoard.postman_collection.json` — a placeholder Postman collection with example requests for common endpoints (GET /api/tasks, POST /api/tasks). Replace with a full exported collection from Postman if you have one.
 - `postman/SyncBoard.postman_environment.json` — a Postman environment with the `baseUrl` variable (defaults to `http://localhost:4000`).
 - README updates describing the API endpoints and how to use the Postman collection.
+- `.env.example` — example Vite environment variable to configure the API base URL.
+- `src/api/taskApi.js` — updated API client that reads VITE_API_BASE_URL, adds a timeout, and exposes PUT/PATCH helpers.
 
 Quick start to test with a local backend
 
@@ -113,23 +115,106 @@ npm install
 npm run dev # or the command your backend uses
 ```
 
-2. Update Postman environment `baseUrl` if your backend runs on a different host/port (default is `http://localhost:4000`).
+2. Configure the frontend to point at the backend. Create a `.env.local` file in the frontend repo root (do NOT commit this file) and add:
 
-3. Import `postman/SyncBoard.postman_collection.json` into Postman and select the `SyncBoard Environment`.
+```
+VITE_API_BASE_URL=http://localhost:4000
+```
 
-4. Run the `Get all tasks` request to verify connectivity.
+3. Start the frontend:
+
+```bash
+npm install
+npm run dev
+```
+
+4. Import the Postman collection (if you have a full export) and run requests against your backend.
 
 API endpoints (front-end expectations)
 
 - GET /api/tasks — returns JSON array of tasks
+- GET /api/tasks/:id — returns single task object
 - POST /api/tasks — create a new task (JSON body: title, description, assignee, dueDate (YYYY-MM-DD), status)
-- PUT /api/tasks/:id — update a task
+- PUT /api/tasks/:id — replace a task
+- PATCH /api/tasks/:id — partial update (optional)
 - DELETE /api/tasks/:id — delete a task
 
-If the backend follows a different contract, update `src/api/taskApi.js` accordingly.
+API Reference — examples
+
+GET /api/tasks
+Request
+```
+GET /api/tasks
+```
+Response (200)
+```json
+[
+  {
+    "id": "1",
+    "title": "Design login",
+    "description": "Add login page",
+    "assignee": "Alice",
+    "dueDate": "2026-09-30",
+    "status": "todo",
+    "createdAt": "2026-08-01T12:00:00.000Z"
+  }
+]
+```
+
+POST /api/tasks
+Request
+```json
+{
+  "title": "New task",
+  "description": "Details",
+  "assignee": "Alice",
+  "dueDate": "2026-09-30",
+  "status": "todo"
+}
+```
+Response (201)
+```json
+{
+  "id": "2",
+  "title": "New task",
+  "description": "Details",
+  "assignee": "Alice",
+  "dueDate": "2026-09-30",
+  "status": "todo",
+  "createdAt": "2026-08-31T00:00:00.000Z"
+}
+```
+
+PUT /api/tasks/:id
+Request
+```json
+{
+  "title": "Updated title",
+  "description": "Updated",
+  "assignee": "Bob",
+  "dueDate": "2026-10-01",
+  "status": "inprogress"
+}
+```
+Response (200)
+```json
+{
+  "id": "2",
+  "title": "Updated title",
+  "description": "Updated",
+  "assignee": "Bob",
+  "dueDate": "2026-10-01",
+  "status": "inprogress",
+  "updatedAt": "2026-08-31T00:10:00.000Z"
+}
+```
+
+DELETE /api/tasks/:id
+Response (204)
 
 Notes
 
-- These Postman files are placeholders — replace with your exported collection/environment for full testing.
-- Do NOT merge this branch into `main` yourself; push directly to the feature branch as per the project workflow.
+- These are example shapes — if your backend uses different field names or response shapes, update `src/api/taskApi.js` accordingly.
+- Use `.env.local` with Vite as shown above to switch backends without changing code.
+- Replace the placeholder Postman collection with an exported collection from your team and push it into the `postman/` directory.
 
