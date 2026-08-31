@@ -1,6 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { darkNavTheme, lightNavTheme } from '../constants/navTheme';
 
 const NAV_LINKS = [
@@ -13,7 +14,14 @@ const NAV_LINKS = [
 export default function Navbar() {
   const { darkMode, toggleTheme } = useTheme();
   const { pathname } = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const theme = darkMode ? darkNavTheme : lightNavTheme;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <nav
@@ -65,12 +73,23 @@ export default function Navbar() {
           aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
           {darkMode ? '☀️' : '🌙'}
         </Button>
-        <div style={{
-          ...styles.avatar, background: theme.avatarBg,
-          border: `1px solid ${theme.avatarBorder}`, color: theme.avatarText,
-        }}>
-          RW
-        </div>
+        {isAuthenticated ? (
+          <>
+            <div style={{
+              ...styles.avatar, background: theme.avatarBg,
+              border: `1px solid ${theme.avatarBorder}`, color: theme.avatarText,
+            }} title={user?.name}>
+              {user?.initials || 'ME'}
+            </div>
+            <Button variant="ghost" size="sm" darkMode={darkMode} onClick={handleLogout}>
+              Log out
+            </Button>
+          </>
+        ) : (
+          <Button variant="primary" size="sm" darkMode={darkMode} onClick={() => navigate('/login')}>
+            Log in
+          </Button>
+        )}
       </div>
     </nav>
   );

@@ -1,13 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
 import BoardPage from './pages/BoardPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import IssuesPage from './pages/IssuesPage';
 import TimelinePage from './pages/TimelinePage';
 import SettingsPage from './pages/SettingsPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { TaskProvider } from './context';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
 
 function AppLayout() {
   const { darkMode, theme } = useTheme();
@@ -24,11 +28,13 @@ function AppLayout() {
 
       <main style={styles.content}>
         <Routes>
-          <Route path="/" element={<BoardPage />} />
-          <Route path="/tasks/:id" element={<TaskDetailPage />} />
-          <Route path="/issues" element={<IssuesPage />} />
-          <Route path="/timeline" element={<TimelinePage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/" element={<ProtectedRoute><BoardPage /></ProtectedRoute>} />
+          <Route path="/tasks/:id" element={<ProtectedRoute><TaskDetailPage /></ProtectedRoute>} />
+          <Route path="/issues" element={<ProtectedRoute><IssuesPage /></ProtectedRoute>} />
+          <Route path="/timeline" element={<ProtectedRoute><TimelinePage /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
@@ -38,13 +44,15 @@ function AppLayout() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <TaskProvider>
-        <Router basename={import.meta.env.BASE_URL}>
-          <AppLayout />
-        </Router>
-      </TaskProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <TaskProvider>
+          <Router basename={import.meta.env.BASE_URL}>
+            <AppLayout />
+          </Router>
+        </TaskProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
