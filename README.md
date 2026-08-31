@@ -1,70 +1,12 @@
-# SyncBoard — Task Management Client
+# SyncBoard — Task Management & API Server
 
-A Jira-style Kanban board built with React and Vite for managing project tasks across team members. This is the front-end skeleton for Assignment 01, running entirely on mock data with a clean component structure and prepared API integration points.
+A Jira-style Kanban board built with React, Vite, Node.js, and Express. This repository contains both the front-end client (syncboard-client) and a minimal REST API server (syncboard-server) to support full end-to-end development and testing for Assignment 02.
 
-**Group 96**
+---
 
-## Getting Started
+## 👥 Group 96 — Team Contributions
 
-### Prerequisites
-- Node.js 18+
-- npm 9+
-
-### Installation
-```bash
-git clone https://github.com/Ramesha06/syncboard-client.git
-cd syncboard-client
-npm install
-```
-
-### Run Development Server
-```bash
-npm run dev
-```
-Opens at `http://localhost:5173` by default.
-
-### Build for Production
-```bash
-npm run build
-npm run preview
-```
-
-## Folder Structure
-
-```
-src/
-├── api/            # All fetch calls (taskApi.js) — components never fetch directly
-├── components/     # Reusable presentational components (Button, TaskCard, Column, Board, etc.)
-├── constants/      # Shared constants (column definitions, nav theme)
-├── context/        # Context providers (TaskContext, ThemeContext) and hooks
-├── data/           # Mock data (mockTasks.js) — stand-in for the database
-├── hooks/          # Custom hooks (useTasks)
-├── pages/          # One component per route (BoardPage, TaskDetailPage, NotFoundPage, etc.)
-└── utils/          # Pure helper functions (validation, date formatting, filters)
-```
-
-### Conventions
-- One component per file, named to match
-- Shared state lives in Context providers, not prop drilling
-- Task state managed with useReducer (add, move, delete actions)
-- API calls go in `src/api/`, never inside components
-- Navigation uses React Router `<Link>`, not `<a>` tags
-
-## Features
-
-- **Kanban Board** — Three columns (To Do, In Progress, Done) with per-column task counts
-- **Create Tasks** — Controlled form with validation (title required, min 3 characters, due date not in past)
-- **Move Tasks** — Left/right buttons to shift tasks between columns
-- **Delete Tasks** — With confirmation dialog before removal
-- **Task Detail** — Deep-linkable `/tasks/:id` route with not-found handling
-- **Filter & Search** — Filter by assignee or status, search by title, empty state when nothing matches
-- **Theme Toggle** — Dark/light mode via ThemeContext
-- **Four UI States** — Loading spinner, error banner, empty state, and success (board) all handled
-- **Issues View** — Table listing of all tasks
-- **Timeline View** — Tasks ordered by due date
-- **Settings Page** — Theme preferences
-
-## Team Contributions — Group 96
+The table below lists the team members recorded in the project. Update roles/IDs below if you want exact assignment-role mapping.
 
 | Member | Student ID | Contribution |
 |--------|-----------|--------------|
@@ -78,19 +20,203 @@ src/
 | PSD Wijesinghe | 30843 | Global state (useReducer) and reusable Badge/Button UI |
 | KGG Theekshana | 30751 | Pages, routing, context integration, deployment, and overall assembly |
 
-## Known Limitations
+---
 
-- Data is stored in-memory (mock data) — refreshing the page resets all changes
-- No backend API connected yet — `src/api/taskApi.js` is prepared but not wired up
-- Filter dropdowns use client-side filtering only
-- No drag-and-drop support (tasks move via left/right buttons)
-- No user authentication
+## 🚀 Quick overview
 
-## Tech Stack
+- Frontend: React + Vite app located at the repository root (this folder) — run with `npm run dev` after installing dependencies.
+- Backend: Express server in `syncboard-server/` providing REST endpoints for tasks and authentication — run with `cd syncboard-server && npm run dev`.
+- Postman: `postman/` contains a placeholder Postman collection and environment; replace with a full export from your team for testing.
 
-- React 19
-- Vite 8
-- React Router 7
-- CSS Modules
+---
 
+## Prerequisites
 
+- Node.js v18+
+- npm v9+
+
+---
+
+## Installation (client + server)
+
+```bash
+# Clone the repository
+git clone https://github.com/Ramesha06/syncboard-client.git
+cd syncboard-client
+
+# Install client dependencies (root)
+npm install
+
+# Install server dependencies
+cd syncboard-server
+npm install
+cd ..
+```
+
+---
+
+## Environment configuration
+
+Do NOT commit sensitive environment files (e.g. `.env.local`). Use `.env.example` as a template.
+
+Client (Vite)
+- Create `.env.local` in the project root with:
+```
+VITE_API_BASE_URL=http://localhost:4000
+```
+
+Server
+- Create `.env` inside `syncboard-server/` (example values):
+```
+PORT=4000
+JWT_SECRET=replace_with_a_strong_secret
+NODE_ENV=development
+```
+
+Required server env vars may include (depending on your server code):
+- PORT
+- JWT_SECRET
+- (optional) RATE_LIMIT_MAX, DB_URL, etc.
+
+---
+
+## Start the apps (development)
+
+Open two terminals:
+
+Terminal 1 — start backend
+```bash
+cd syncboard-server
+npm run dev
+```
+
+Terminal 2 — start frontend
+```bash
+# from repo root
+npm run dev
+```
+
+The frontend opens at `http://localhost:5173` by default and will use the API base URL from `VITE_API_BASE_URL`.
+
+Optional: Add a top-level `dev` script (not included) or use a tool like `concurrently` if you want a single command to run both.
+
+---
+
+## Postman & API testing
+
+A placeholder Postman collection and environment are added under `postman/`:
+- `postman/SyncBoard.postman_collection.json`
+- `postman/SyncBoard.postman_environment.json`
+
+Import these into Postman and set the `baseUrl` variable to your running server (`http://localhost:4000` by default).
+
+Replace these placeholders with your exported Postman collection and environment for full testing.
+
+---
+
+## API endpoints (front-end expectations)
+
+These are the endpoints the front-end client expects by default. If your server uses different paths, IDs, or response envelopes, update `src/api/taskApi.js` accordingly.
+
+- GET /api/tasks — list tasks (returns an array)
+- GET /api/tasks/:id — get single task
+- POST /api/tasks — create a task; body: { title, description, assignee, dueDate (YYYY-MM-DD), status }
+- PUT /api/tasks/:id — replace a task
+- PATCH /api/tasks/:id — partial update
+- DELETE /api/tasks/:id — delete a task (204)
+- POST /api/auth/register — create user (if implemented)
+- POST /api/auth/login — returns JWT token (if implemented)
+
+Example GET /api/tasks response
+```json
+[
+  {
+    "id": "1",
+    "title": "Design login",
+    "description": "Add login page",
+    "assignee": "Alice",
+    "dueDate": "2026-09-30",
+    "status": "todo",
+    "createdAt": "2026-08-01T12:00:00.000Z"
+  }
+]
+```
+
+Example POST /api/tasks request
+```json
+{
+  "title": "New task",
+  "description": "Details",
+  "assignee": "Alice",
+  "dueDate": "2026-09-30",
+  "status": "todo"
+}
+```
+
+Example POST /api/tasks response (201)
+```json
+{
+  "id": "2",
+  "title": "New task",
+  "description": "Details",
+  "assignee": "Alice",
+  "dueDate": "2026-09-30",
+  "status": "todo",
+  "createdAt": "2026-08-31T00:00:00.000Z"
+}
+```
+
+Notes on common mismatch areas
+- Base path: `/api/tasks` vs `/tasks`
+- ID field: `id` vs `_id`
+- Response envelope: raw array vs { data: [...] }
+- Auth flow: how tokens are issued and expected in Authorization header
+
+---
+
+## Frontend: API client & wiring
+
+The front-end API client is in `src/api/taskApi.js`. It reads the base URL from `import.meta.env.VITE_API_BASE_URL` and includes helpers for GET/POST/PUT/PATCH/DELETE. If your backend uses different routes/field names, update this file and ensure `.env.local` points to the correct base URL.
+
+Helpful quick commands
+- Check the current branch and latest commit:
+```bash
+git branch --show-current
+git log -1
+```
+- Inspect the Postman folder:
+```bash
+ls postman
+cat postman/SyncBoard.postman_collection.json | jq . | head -n 50
+```
+
+---
+
+## Testing & troubleshooting
+
+- CORS errors: enable CORS in the backend (e.g., `app.use(cors())`) or configure a Vite proxy in `vite.config.js`.
+- 401/403: confirm JWT_SECRET and token handling; check localStorage key names (token or syncboard_token).
+- Timeouts: `src/api/taskApi.js` includes a default fetch timeout; make sure the server starts and responds on the configured port.
+
+---
+
+## Next steps & recommendations
+
+1. Replace placeholder Postman files with full exported collection + environment.
+2. Confirm API contract (ID field names, response envelopes) and update `src/api/taskApi.js` accordingly.
+3. Wire the front-end hooks/state to use the API (if parts of the app still use mock data in `src/data/mockTasks.js`).
+4. Add a smoke-test script and optionally a CI workflow that runs it on pushes to feature branches.
+
+---
+
+## License & Code of Conduct
+
+Include your project license and any contributor guidelines here.
+
+---
+
+If you want, I can commit this polished README to `feature/assignment-2-backend-integration` now and also:
+- add a `docs/API.md` file with expanded request/response examples, or
+- replace the placeholder Postman files if you upload the exported collection.
+
+Reply "Commit README" to apply this README to the feature branch, or tell me edits to make before committing.
