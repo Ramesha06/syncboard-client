@@ -1,0 +1,39 @@
+{
+  "info": {
+    "name": "SyncBoard API (placeholder)",
+    "description": "Placeholder Postman collection for SyncBoard backend endpoints. Replace with exported collection from Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get all tasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","tasks"]
+        }
+      }
+    },
+    {
+      "name": "Create task",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"New task\",\n  \"description\": \"Details\",\n  \"assignee\": \"Alice\",\n  \"dueDate\": \"2026-09-30\",\n  \"status\": \"todo\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","tasks"]
+        }
+      }
+    }
+  ]
+}
