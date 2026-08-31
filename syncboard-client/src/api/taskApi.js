@@ -1,35 +1,79 @@
-const API_BASE = '/api';
+const BASE_URL = 'http://localhost:5000/api/tasks';
 
-export async function fetchTasks() {
-  const response = await fetch(`${API_BASE}/tasks`);
-  if (!response.ok) throw new Error('Failed to fetch tasks');
-  return response.json();
-}
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token') || localStorage.getItem('syncboard_token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
 
-export async function createTask(taskData) {
-  const response = await fetch(`${API_BASE}/tasks`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(taskData),
-  });
-  if (!response.ok) throw new Error('Failed to create task');
-  return response.json();
-}
+const handleResponse = async (res) => {
+  const data = await res.json().catch(() => null);
 
-export async function updateTask(id, taskData) {
-  const response = await fetch(`${API_BASE}/tasks/${encodeURIComponent(id)}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(taskData),
-  });
-  if (!response.ok) throw new Error('Failed to update task');
-  return response.json();
-}
+  if (!res.ok) {
+    const error = new Error(data?.message || data?.error || 'Request failed');
+    error.status = res.status;
+    error.errors = Array.isArray(data?.errors) ? data.errors : [];
+    throw error;
+  }
 
-export async function deleteTask(id) {
-  const response = await fetch(`${API_BASE}/tasks/${encodeURIComponent(id)}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) throw new Error('Failed to delete task');
-  return response.json();
-}
+  return data;
+};
+
+export const taskApi = {
+  async getAll(params = {}) {
+    const query = new URLSearchParams(
+      Object.entries(params).filter(([_, value]) => value != null && value !== '')
+    ).toString();
+    const url = query ? `${BASE_URL}?${query}` : BASE_URL;
+
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+
+    return handleResponse(res);
+  },
+
+  async getById(id) {
+    const res = await fetch(`${BASE_URL}/${id}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  async create(taskData) {
+    const res = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(taskData),
+    });
+    return handleResponse(res);
+  },
+
+  async update(id, updates) {
+    const res = await fetch(`${BASE_URL}/${id}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(updates),
+    });
+    return handleResponse(res);
+  },
+
+  async delete(id) {
+    const res = await fetch(`${BASE_URL}/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+
+    if (res.status === 204) return true;
+    return handleResponse(res);
+  },
+};
+
+export const fetchTasks = () => taskApi.getAll();
+export const createTask = (taskData) => taskApi.create(taskData);
+export const updateTask = (id, taskData) => taskApi.update(id, taskData);
+export const deleteTask = (id) => taskApi.delete(id);

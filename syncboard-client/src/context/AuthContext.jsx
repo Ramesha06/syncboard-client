@@ -3,8 +3,13 @@ import { loginUser, registerUser } from '../api/authApi';
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = 'syncboard_token';
+const TOKEN_KEY = 'token';
+const LEGACY_TOKEN_KEY = 'syncboard_token';
 const USER_KEY = 'syncboard_user';
+
+function readStoredToken() {
+  return localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
+}
 
 function readStoredUser() {
   try {
@@ -16,7 +21,7 @@ function readStoredUser() {
 }
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
+  const [token, setToken] = useState(() => readStoredToken());
   const [user, setUser] = useState(readStoredUser);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,6 +32,7 @@ export function AuthProvider({ children }) {
     try {
       const { token: nextToken, user: nextUser } = await loginUser({ email, password });
       localStorage.setItem(TOKEN_KEY, nextToken);
+      localStorage.setItem(LEGACY_TOKEN_KEY, nextToken);
       localStorage.setItem(USER_KEY, JSON.stringify(nextUser));
       setToken(nextToken);
       setUser(nextUser);
@@ -54,6 +60,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     setToken(null);
     setUser(null);

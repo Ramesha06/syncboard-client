@@ -10,23 +10,16 @@ import { useTheme } from '../context/ThemeContext';
 
 export default function BoardPage() {
   const { darkMode } = useTheme();
-  const { tasks, loading, error, setLoading, setError, addTask } = useTasks();
+  const { tasks, loading, error, fetchTasks } = useTasks();
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [targetColumnId, setTargetColumnId] = useState('todo');
-  const [initialLoad, setInitialLoad] = useState(true);
   const [selectedAssignee, setSelectedAssignee] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    if (!initialLoad) return;
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setLoading(false);
-      setInitialLoad(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, [initialLoad, setLoading]);
+    fetchTasks();
+  }, [fetchTasks]);
 
   const handleAddTask = (columnId) => {
     setTargetColumnId(columnId);
@@ -34,22 +27,18 @@ export default function BoardPage() {
   };
 
   const assignees = [...new Set(
-    tasks.map((t) => t.assignee || t.assigneeInitials).filter(Boolean)
+    tasks.map((task) => task.assignee || task.assigneeInitials).filter(Boolean)
   )];
 
   const filteredTasks = tasks.filter((task) => {
-    const matchesAssignee = !selectedAssignee ||
-      task.assignee === selectedAssignee ||
-      task.assigneeInitials === selectedAssignee;
+    const matchesAssignee = !selectedAssignee || task.assignee === selectedAssignee || task.assigneeInitials === selectedAssignee;
     const matchesStatus = !selectedStatus || task.status === selectedStatus;
     const query = searchQuery.toLowerCase().trim();
-    const matchesSearch = !query ||
-      task.title?.toLowerCase().includes(query) ||
-      task.description?.toLowerCase().includes(query);
+    const matchesSearch = !query || task.title?.toLowerCase().includes(query) || task.description?.toLowerCase().includes(query);
     return matchesAssignee && matchesStatus && matchesSearch;
   });
 
-  const doneCount = tasks.filter((t) => t.status === 'done').length;
+  const doneCount = tasks.filter((task) => task.status === 'done').length;
   const hasActiveFilters = !!(selectedAssignee || selectedStatus || searchQuery);
 
   const resetFilters = () => {
@@ -61,13 +50,18 @@ export default function BoardPage() {
   if (loading) return <Spinner message="Loading board..." />;
 
   if (error) {
-    return <ErrorBanner message={error} onRetry={() => { setError(null); setInitialLoad(true); }} darkMode={darkMode} />;
+    return <ErrorBanner message={error} onRetry={fetchTasks} darkMode={darkMode} />;
   }
 
   if (tasks.length === 0) {
     return (
-      <EmptyState title="No tasks yet" description="Create your first task to get started."
-        actionLabel="Add Task" onAction={() => handleAddTask('todo')} darkMode={darkMode} />
+      <EmptyState
+        title="No tasks yet"
+        description="Create your first task to get started."
+        actionLabel="Add Task"
+        onAction={() => handleAddTask('todo')}
+        darkMode={darkMode}
+      />
     );
   }
 
@@ -87,16 +81,33 @@ export default function BoardPage() {
       />
 
       {filteredTasks.length === 0 ? (
-        <EmptyState title="No matching tasks" description="Try adjusting your filters or search query."
-          actionLabel="Reset Filters" onAction={resetFilters} darkMode={darkMode} />
+        <EmptyState
+          title="No matching tasks"
+          description="Try adjusting your filters or search query."
+          actionLabel="Reset Filters"
+          onAction={resetFilters}
+          darkMode={darkMode}
+        />
       ) : (
-        <Board darkMode={darkMode} tasks={filteredTasks} doneCount={doneCount}
-          totalCount={tasks.length} onAddTask={handleAddTask} />
+        <Board
+          darkMode={darkMode}
+          tasks={filteredTasks}
+          doneCount={doneCount}
+          totalCount={tasks.length}
+          onAddTask={handleAddTask}
+        />
       )}
 
       {isAddTaskOpen && (
-        <AddTaskForm onClose={() => setIsAddTaskOpen(false)} onSubmit={addTask}
-          darkMode={darkMode} defaultColumnId={targetColumnId} />
+        <AddTaskForm
+          onClose={() => setIsAddTaskOpen(false)}
+          onTaskCreated={() => {
+            setIsAddTaskOpen(false);
+            fetchTasks();
+          }}
+          darkMode={darkMode}
+          defaultColumnId={targetColumnId}
+        />
       )}
     </>
   );

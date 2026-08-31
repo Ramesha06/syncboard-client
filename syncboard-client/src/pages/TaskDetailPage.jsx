@@ -1,13 +1,55 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useTasks } from '../context';
+import { taskApi } from '../api/taskApi';
+import Spinner from '../components/Spinner';
+import ErrorBanner from '../components/ErrorBanner';
 import { useTheme } from '../context/ThemeContext';
 
 export default function TaskDetailPage() {
   const { id } = useParams();
-  const { tasks } = useTasks();
   const { darkMode } = useTheme();
+  const [task, setTask] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const task = tasks.find((t) => t.id === id);
+  useEffect(() => {
+    let active = true;
+
+    const loadTask = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await taskApi.getById(id);
+        if (!active) return;
+        setTask(response.data || response);
+      } catch (err) {
+        if (!active) return;
+
+        if (err.status === 404) {
+          setTask(null);
+        } else {
+          setError(err.message || 'Unable to load task');
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    loadTask();
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return <Spinner message="Loading task..." />;
+  }
+
+  if (error) {
+    return <ErrorBanner message={error} onRetry={() => window.location.reload()} darkMode={darkMode} />;
+  }
 
   if (!task) {
     return (
@@ -39,14 +81,7 @@ export default function TaskDetailPage() {
         }}
       >
         <div style={styles.header}>
-          <span
-            style={{
-              ...styles.taskId,
-              color: darkMode ? '#94A3B8' : '#64748B',
-            }}
-          >
-            {task.id}
-          </span>
+          <span style={{ ...styles.taskId, color: darkMode ? '#94A3B8' : '#64748B' }}>{task.id}</span>
           <span
             style={{
               ...styles.statusBadge,
@@ -57,14 +92,10 @@ export default function TaskDetailPage() {
           </span>
         </div>
 
-        <h1 style={{ ...styles.title, color: darkMode ? '#F8FAFC' : '#0F172A' }}>
-          {task.title}
-        </h1>
+        <h1 style={{ ...styles.title, color: darkMode ? '#F8FAFC' : '#0F172A' }}>{task.title}</h1>
 
         {task.description && (
-          <p style={{ ...styles.description, color: darkMode ? '#CBD5E1' : '#475569' }}>
-            {task.description}
-          </p>
+          <p style={{ ...styles.description, color: darkMode ? '#CBD5E1' : '#475569' }}>{task.description}</p>
         )}
 
         <div style={styles.details}>
@@ -80,12 +111,8 @@ export default function TaskDetailPage() {
 function DetailRow({ label, value, darkMode }) {
   return (
     <div style={styles.detailRow}>
-      <span style={{ ...styles.detailLabel, color: darkMode ? '#94A3B8' : '#64748B' }}>
-        {label}
-      </span>
-      <span style={{ ...styles.detailValue, color: darkMode ? '#F8FAFC' : '#0F172A' }}>
-        {value}
-      </span>
+      <span style={{ ...styles.detailLabel, color: darkMode ? '#94A3B8' : '#64748B' }}>{label}</span>
+      <span style={{ ...styles.detailValue, color: darkMode ? '#F8FAFC' : '#0F172A' }}>{value}</span>
     </div>
   );
 }
