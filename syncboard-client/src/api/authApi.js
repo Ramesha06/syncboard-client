@@ -1,9 +1,15 @@
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL.replace(/\/$/, '')}/api`
+  : 'http://localhost:5000/api';
 
 async function parseAuthResponse(response) {
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const message = body.message || body.errors?.[0]?.message || 'Request failed';
+    const message =
+      body.message ||
+      (Array.isArray(body.errors) && (body.errors[0]?.message || body.errors[0])) ||
+      body.error ||
+      'Authentication failed';
     throw new Error(message);
   }
   return body.data;
@@ -26,3 +32,4 @@ export async function loginUser({ email, password }) {
   });
   return parseAuthResponse(response);
 }
+

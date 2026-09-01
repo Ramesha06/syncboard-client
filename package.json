@@ -1,0 +1,14 @@
+{
+  "name": "syncboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:client": "npm --prefix syncboard-client run dev",
+    "dev:server": "npm --prefix syncboard-server run dev",
+    "dev": "npm --prefix syncboard-client run dev",
+    "build": "npm --prefix syncboard-client run build",
+    "install:all": "npm --prefix syncboard-client install && npm --prefix syncboard-server install",
+    "start": "npm --prefix syncboard-server start"
+  }
+}

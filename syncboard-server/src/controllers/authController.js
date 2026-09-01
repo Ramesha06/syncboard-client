@@ -8,7 +8,13 @@ export const register = async (req, res) => {
     res.status(201).json({ success: true, data: user });
   } catch (err) {
     if (err.name === 'ZodError') {
-      return res.status(400).json({ success: false, errors: err.errors });
+      const issues = err.issues || err.errors || [];
+      const message = issues[0]?.message || 'Validation failed';
+      const errors = issues.map((e) => ({
+        field: Array.isArray(e.path) ? e.path.join('.') : String(e.path || ''),
+        message: e.message,
+      }));
+      return res.status(400).json({ success: false, message, errors });
     }
     res.status(err.statusCode || 500).json({ success: false, message: err.message });
   }
@@ -21,8 +27,14 @@ export const login = async (req, res) => {
     res.status(200).json({ success: true, data: result });
   } catch (err) {
     if (err.name === 'ZodError') {
-      return res.status(400).json({ success: false, errors: err.errors });
+      const issues = err.issues || err.errors || [];
+      const message = issues[0]?.message || 'Validation failed';
+      const errors = issues.map((e) => ({
+        field: Array.isArray(e.path) ? e.path.join('.') : String(e.path || ''),
+        message: e.message,
+      }));
+      return res.status(400).json({ success: false, message, errors });
     }
     res.status(err.statusCode || 500).json({ success: false, message: err.message });
   }
-};
+};

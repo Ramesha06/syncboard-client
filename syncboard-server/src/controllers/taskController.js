@@ -1,4 +1,5 @@
 import taskService from '../services/taskService.js';
+import userRepository from '../repositories/userRepository.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 /**
@@ -6,15 +7,16 @@ import asyncHandler from '../utils/asyncHandler.js';
  * @returns {string}
  */
 function resolveUserId(req) {
-    return req.body?.userId || req.query?.userId || 'USR-01';
+    return req.user?.id || req.body?.userId || req.query?.userId || 'USR-01';
 }
 
 
 export const getTasks = asyncHandler(async (req, res) => {
     const userId = resolveUserId(req);
-    const { boardId = 'BOARD-01', ...query } = req.query;
+    const user = await userRepository.findById(userId);
+    const boardId = req.query.boardId || user?.boards?.[0] || 'BOARD-01';
 
-    const result = await taskService.getTasks({ userId, boardId, query });
+    const result = await taskService.getTasks({ userId, boardId, query: req.query });
 
     res.status(200).json({
         success: true,
@@ -36,15 +38,17 @@ export const getTaskById = asyncHandler(async (req, res) => {
 
 export const createTask = asyncHandler(async (req, res) => {
     const userId = resolveUserId(req);
-    const { boardId, ...data } = req.body;
+    const user = await userRepository.findById(userId);
+    const boardId = req.body?.boardId || user?.boards?.[0] || 'BOARD-01';
 
-    const task = await taskService.createTask({ userId, boardId, data });
+    const task = await taskService.createTask({ userId, boardId, data: req.body });
 
     res.status(201).json({
         success: true,
         data: task,
     });
 });
+
 
 
 export const updateTask = asyncHandler(async (req, res) => {

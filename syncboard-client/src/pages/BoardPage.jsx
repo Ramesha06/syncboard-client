@@ -21,8 +21,8 @@ export default function BoardPage() {
     fetchTasks();
   }, [fetchTasks]);
 
-  const handleAddTask = (columnId) => {
-    setTargetColumnId(columnId);
+  const handleAddTask = (columnId = 'todo') => {
+    setTargetColumnId(typeof columnId === 'string' ? columnId : 'todo');
     setIsAddTaskOpen(true);
   };
 
@@ -53,18 +53,6 @@ export default function BoardPage() {
     return <ErrorBanner message={error} onRetry={fetchTasks} darkMode={darkMode} />;
   }
 
-  if (tasks.length === 0) {
-    return (
-      <EmptyState
-        title="No tasks yet"
-        description="Create your first task to get started."
-        actionLabel="Add Task"
-        onAction={() => handleAddTask('todo')}
-        darkMode={darkMode}
-      />
-    );
-  }
-
   return (
     <>
       <FilterDropdowns
@@ -80,7 +68,7 @@ export default function BoardPage() {
         darkMode={darkMode}
       />
 
-      {filteredTasks.length === 0 ? (
+      {hasActiveFilters && filteredTasks.length === 0 ? (
         <EmptyState
           title="No matching tasks"
           description="Try adjusting your filters or search query."

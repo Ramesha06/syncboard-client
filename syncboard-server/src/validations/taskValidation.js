@@ -23,11 +23,12 @@ const baseTaskShape = {
             message: 'Due date must be a valid date (e.g. 2025-08-25)',
         }),
 
-    boardId: requiredString('Board ID').trim().min(1, 'Board ID is required'),
+    boardId: z.string().trim().optional(),
 
     description: z.string().trim().optional(),
     assignee: z.string().trim().optional(),
 };
+
 
 export const createTaskSchema = z.object(baseTaskShape);
 

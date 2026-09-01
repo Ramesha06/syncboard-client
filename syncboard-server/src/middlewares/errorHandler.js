@@ -5,9 +5,10 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.name === "ZodError") {
     statusCode = 400;
-    message = "Validation Error";
-    errors = err.errors.map((e) => ({
-      field: e.path.join("."),
+    const issues = err.issues || err.errors || [];
+    message = issues[0]?.message || "Validation Error";
+    errors = issues.map((e) => ({
+      field: Array.isArray(e.path) ? e.path.join(".") : String(e.path || ""),
       message: e.message,
     }));
   } else if (err.name === "JsonWebTokenError") {
@@ -17,6 +18,7 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 401;
     message = "Your token has expired. Please log in again.";
   }
+
 
   res.status(statusCode).json({
     success: false,

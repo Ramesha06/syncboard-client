@@ -1,4 +1,6 @@
-const BASE_URL = 'http://localhost:5000/api/tasks';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = `${API_BASE.replace(/\/$/, '')}/api/tasks`;
+
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token') || localStorage.getItem('syncboard_token');
@@ -24,9 +26,10 @@ const handleResponse = async (res) => {
 export const taskApi = {
   async getAll(params = {}) {
     const query = new URLSearchParams(
-      Object.entries(params).filter(([_, value]) => value != null && value !== '')
+      Object.entries(params).filter(([, value]) => value != null && value !== '')
     ).toString();
     const url = query ? `${BASE_URL}?${query}` : BASE_URL;
+
 
     const res = await fetch(url, {
       method: 'GET',

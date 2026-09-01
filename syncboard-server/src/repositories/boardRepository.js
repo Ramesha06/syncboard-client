@@ -43,6 +43,24 @@ class BoardRepository {
   }
 
   /**
+   * Add a user to a board's member list
+   * @param {string} boardId - Board ID
+   * @param {string} userId - User ID
+   * @returns {boolean} True if added or already a member
+   */
+  async addMember(boardId, userId) {
+    const board = this.boards.find((b) => b.id === boardId);
+    if (!board) return false;
+
+    if (!board.members) board.members = [];
+    if (!board.members.includes(userId)) {
+      board.members.push(userId);
+    }
+    return true;
+  }
+
+
+  /**
    * Create a new board
    * @param {Object} boardData
    * @returns {Object} Created board

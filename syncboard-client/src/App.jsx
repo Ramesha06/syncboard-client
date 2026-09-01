@@ -14,7 +14,8 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 
 function AppLayout() {
-  const { darkMode, theme } = useTheme();
+  const { theme } = useTheme();
+
 
   return (
     <div
