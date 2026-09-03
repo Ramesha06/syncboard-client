@@ -1,94 +1,99 @@
-import initialBoards from '../data/boards.js';
+import mongoose from 'mongoose';
+import Board from '../models/Board.js';
 
 /**
  * BoardRepository
- * Encapsulates in-memory board management and member verification for access control
+ * Encapsulates MongoDB database operations for boards using Mongoose.
  */
 class BoardRepository {
-  constructor() {
-    this.boards = initialBoards.map((b) => ({ ...b, members: [...b.members] }));
-    this.idCounter = this.boards.length + 1;
-  }
-
   /**
    * Retrieve all boards
-   * @returns {Array<Object>}
+   * @returns {Promise<Array<Object>>} List of boards
    */
   async findAll() {
-    return this.boards.map((b) => ({ ...b, members: [...b.members] }));
+    const boards = await Board.find();
+    return boards.map((b) => b.toJSON());
   }
 
   /**
    * Find a board by unique ID
-   * @param {string} id - Board ID (e.g. 'BOARD-01')
-   * @returns {Object|null}
+   * @param {string} id - Board ObjectId string
+   * @returns {Promise<Object|null>} Board object or null
    */
   async findById(id) {
-    const board = this.boards.find((b) => b.id === id);
-    return board ? { ...board, members: [...board.members] } : null;
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
+
+    const board = await Board.findById(id);
+    return board ? board.toJSON() : null;
   }
 
   /**
    * Check whether a user is an owner or member of a specific board
-   * @param {string} boardId - Board ID
-   * @param {string} userId - User ID
-   * @returns {boolean} True if user has access, false otherwise
+   * @param {string} boardId - Board ObjectId string
+   * @param {string} userId - User ObjectId string
+   * @returns {Promise<boolean>} True if user has access, false otherwise
    */
   async isUserMember(boardId, userId) {
-    const board = await this.findById(boardId);
+    if (!boardId || !userId) return false;
+    if (!mongoose.Types.ObjectId.isValid(boardId)) return false;
+
+    const board = await Board.findById(boardId);
     if (!board) return false;
 
-    if (board.ownerId === userId) return true;
-    return board.members && board.members.includes(userId);
+    const isOwner = board.ownerId?.toString() === userId.toString();
+    const isMember = board.members?.some((m) => m.toString() === userId.toString());
+
+    return Boolean(isOwner || isMember);
   }
 
   /**
    * Add a user to a board's member list
-   * @param {string} boardId - Board ID
-   * @param {string} userId - User ID
-   * @returns {boolean} True if added or already a member
+   * @param {string} boardId - Board ObjectId string
+   * @param {string} userId - User ObjectId string
+   * @returns {Promise<boolean>} True if added or already a member, false if board not found
    */
   async addMember(boardId, userId) {
-    const board = this.boards.find((b) => b.id === boardId);
-    if (!board) return false;
-
-    if (!board.members) board.members = [];
-    if (!board.members.includes(userId)) {
-      board.members.push(userId);
+    if (!boardId || !userId || !mongoose.Types.ObjectId.isValid(boardId)) {
+      return false;
     }
-    return true;
-  }
 
+    const updated = await Board.findByIdAndUpdate(
+      boardId,
+      { $addToSet: { members: userId } },
+      { returnDocument: 'after' }
+    );
+
+    return Boolean(updated);
+  }
 
   /**
    * Create a new board
-   * @param {Object} boardData
-   * @returns {Object} Created board
+   * @param {Object} boardData - Board creation properties
+   * @returns {Promise<Object>} Created board object
    */
   async create(boardData) {
-    const paddedIndex = String(this.idCounter++).padStart(2, '0');
-    const newId = boardData.id || `BOARD-${paddedIndex}`;
-    const now = new Date().toISOString();
+    const ownerId = boardData.ownerId || new mongoose.Types.ObjectId();
+    const members = Array.from(
+      new Set([ownerId.toString(), ...(boardData.members || []).map((m) => m.toString())])
+    );
 
-    const newBoard = {
-      id: newId,
+    const board = await Board.create({
       title: boardData.title,
       description: boardData.description || '',
-      ownerId: boardData.ownerId,
-      members: Array.from(new Set([boardData.ownerId, ...(boardData.members || [])])),
-      createdAt: now,
-    };
+      ownerId,
+      members,
+    });
 
-    this.boards.push(newBoard);
-    return { ...newBoard, members: [...newBoard.members] };
+    return board.toJSON();
   }
 
   /**
-   * Reset repository to initial seed state
+   * Reset repository state in MongoDB
    */
   async reset() {
-    this.boards = initialBoards.map((b) => ({ ...b, members: [...b.members] }));
-    this.idCounter = this.boards.length + 1;
+    await Board.deleteMany({});
   }
 }
 
