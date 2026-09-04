@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { taskApi } from '../api/taskApi';
+import { normalizeTask, taskApi } from '../api/taskApi';
 import Spinner from '../components/Spinner';
 import ErrorBanner from '../components/ErrorBanner';
 import { useTheme } from '../context/ThemeContext';
@@ -22,7 +22,7 @@ export default function TaskDetailPage() {
       try {
         const response = await taskApi.getById(id);
         if (!active) return;
-        setTask(response.data || response);
+        setTask(normalizeTask(response.data || response));
       } catch (err) {
         if (!active) return;
 
@@ -81,7 +81,7 @@ export default function TaskDetailPage() {
         }}
       >
         <div style={styles.header}>
-          <span style={{ ...styles.taskId, color: darkMode ? '#94A3B8' : '#64748B' }}>{task.id}</span>
+          <span style={{ ...styles.taskId, color: darkMode ? '#94A3B8' : '#64748B' }}>{task.id || task._id}</span>
           <span
             style={{
               ...styles.statusBadge,

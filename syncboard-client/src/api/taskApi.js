@@ -1,6 +1,49 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 const BASE_URL = `${API_BASE.replace(/\/$/, '')}/api/tasks`;
 
+export const getTaskId = (taskOrId) => {
+  if (taskOrId && typeof taskOrId === 'object') {
+    return taskOrId.id ?? taskOrId._id;
+  }
+
+  return taskOrId;
+};
+
+export const normalizeTask = (task) => {
+  if (!task || typeof task !== 'object' || Array.isArray(task)) return task;
+
+  const id = getTaskId(task);
+  if (id == null) return task;
+
+  return {
+    ...task,
+    id: String(id),
+    _id: task._id ?? String(id),
+  };
+};
+
+const normalizeTaskResponse = (payload) => {
+  if (Array.isArray(payload)) return payload.map(normalizeTask);
+  if (!payload || typeof payload !== 'object') return payload;
+
+  if (Array.isArray(payload.items)) {
+    return { ...payload, items: payload.items.map(normalizeTask) };
+  }
+
+  if (Array.isArray(payload.tasks)) {
+    return { ...payload, tasks: payload.tasks.map(normalizeTask) };
+  }
+
+  if (payload.data !== undefined) {
+    return { ...payload, data: normalizeTaskResponse(payload.data) };
+  }
+
+  if (payload.task !== undefined) {
+    return { ...payload, task: normalizeTask(payload.task) };
+  }
+
+  return normalizeTask(payload);
+};
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token') || localStorage.getItem('syncboard_token');
@@ -20,7 +63,7 @@ const handleResponse = async (res) => {
     throw error;
   }
 
-  return data;
+  return normalizeTaskResponse(data);
 };
 
 export const taskApi = {
@@ -40,7 +83,8 @@ export const taskApi = {
   },
 
   async getById(id) {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const taskId = getTaskId(id);
+    const res = await fetch(`${BASE_URL}/${encodeURIComponent(taskId)}`, {
       method: 'GET',
       headers: getAuthHeaders(),
     });
@@ -57,7 +101,8 @@ export const taskApi = {
   },
 
   async update(id, updates) {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const taskId = getTaskId(id);
+    const res = await fetch(`${BASE_URL}/${encodeURIComponent(taskId)}`, {
       method: 'PATCH',
       headers: getAuthHeaders(),
       body: JSON.stringify(updates),
@@ -66,7 +111,8 @@ export const taskApi = {
   },
 
   async delete(id) {
-    const res = await fetch(`${BASE_URL}/${id}`, {
+    const taskId = getTaskId(id);
+    const res = await fetch(`${BASE_URL}/${encodeURIComponent(taskId)}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     });
