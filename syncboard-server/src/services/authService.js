@@ -43,14 +43,14 @@ export const register = async ({ name, email, password }) => {
 
 export const login = async ({ email, password }) => {
   // includePassword=true — we need the hash to compare against
-  const user = await userRepository.findByEmail(email, true);
-  if (!user) {
+  const userWithPassword = await userRepository.findByEmail(email, true);
+  if (!userWithPassword) {
     const error = new Error('Invalid credentials');
     error.statusCode = 401;
     throw error;
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, userWithPassword.password);
   if (!isMatch) {
     const error = new Error('Invalid credentials');
     error.statusCode = 401;
@@ -58,11 +58,13 @@ export const login = async ({ email, password }) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: userWithPassword.id, email: userWithPassword.email },
     config.jwtSecret,
     { expiresIn: '1h' }
   );
 
-  const { password: _omit, ...safeUser } = user;
-  return { token, user: safeUser };
-};
+  // The User model's toJSON transform already strips the password field,
+  // so re-fetching without includePassword gives us a safe user for free.
+  const user = await userRepository.findByEmail(email);
+  return { token, user };
+};

@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "db:seed": "node src/db/seed.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
