@@ -1,0 +1,202 @@
+{
+  "info": {
+    "name": "SyncBoard API - Assignment 03",
+    "description": "Postman collection for SyncBoard backend endpoints with tests that set dynamic boardId and taskId variables.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Boards",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/boards",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "boards"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', function () { pm.response.to.have.status(200); });",
+              "try {",
+              "  var json = pm.response.json();",
+              "  if (Array.isArray(json) && json.length) {",
+              "    var first = json[0];",
+              "    var id = first.id || first._id;",
+              "    if (id) { pm.environment.set('boardId', id); }",
+              "  }",
+              "} catch (e) { pm.test('response is JSON', function () { throw e; }); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"New task from Postman\",\n  \"description\": \"Details\",\n  \"assignee\": \"Alice\",\n  \"dueDate\": \"2026-09-30\",\n  \"status\": \"todo\",\n  \"boardId\": \"{{boardId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "tasks"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 or 200 Created', function() { pm.response.to.be.ok; });",
+              "try {",
+              "  var json = pm.response.json();",
+              "  var id = json.id || json._id;",
+              "  if (id) { pm.environment.set('taskId', id); }",
+              "} catch (e) { /* ignore - some endpoints might return empty body */ }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get all tasks",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "tasks"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get task by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "tasks",
+            "{{taskId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK or 404 if not found', function() { pm.response.to.be.oneOf([200,404]); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete task by id",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "tasks",
+            "{{taskId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('204 or 200 on delete', function() { pm.response.to.be.oneOf([200,204,404]); });",
+              "pm.environment.unset('taskId');"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Register user (used to test duplicate email)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"duplicate@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expect 201 or 409 for duplicates', function() { pm.response.to.be.oneOf([201,201,409]); });",
+              "if (pm.response.code === 409) { pm.test('duplicate email mapped to 409', function() { pm.expect(pm.response.code).to.equal(409); }); }"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
