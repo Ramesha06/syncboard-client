@@ -1,5 +1,8 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-const BASE_URL = `${API_BASE.replace(/\/$/, '')}/api/tasks`;
+const RAW_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = RAW_URL
+  ? (RAW_URL.endsWith('/api') ? RAW_URL.replace(/\/$/, '') : `${RAW_URL.replace(/\/$/, '')}/api`)
+  : '/api';
+const BASE_URL = `${API_BASE}/tasks`;
 
 export const getTaskId = (taskOrId) => {
   if (taskOrId && typeof taskOrId === 'object') {
