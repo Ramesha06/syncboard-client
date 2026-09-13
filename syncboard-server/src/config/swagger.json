@@ -1,0 +1,713 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SyncBoard REST API Specification",
+    "description": "Comprehensive REST API specification for **SyncBoard** — a real-time collaborative Kanban task management platform.\n\n### Authentication\nProtected endpoints require a JSON Web Token (JWT) supplied in the `Authorization` header:\n`Authorization: Bearer <your_jwt_token>`.\n\nTokens can be obtained by logging in via `POST /api/auth/login` or registering via `POST /api/auth/register`.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "SyncBoard Team - Group 96",
+      "email": "support@syncboard.dev"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Local Development Server"
+    },
+    {
+      "url": "http://localhost:4000",
+      "description": "Alternative Local Port"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Server diagnostics & MongoDB database connection status"
+    },
+    {
+      "name": "Authentication",
+      "description": "User registration and JWT token authentication"
+    },
+    {
+      "name": "Boards",
+      "description": "Kanban workspace and board management"
+    },
+    {
+      "name": "Tasks",
+      "description": "Kanban task CRUD operations, assignment, and status updates"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Health Check & Database Diagnostics",
+        "description": "Returns uptime, server timestamp, and Mongoose connection state to MongoDB.",
+        "responses": {
+          "200": {
+            "description": "Server is healthy and connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new user account",
+        "description": "Creates a new user record with salted bcrypt password hashing. Returns user profile and JWT token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error (invalid email, short password, missing fields)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict: Email address already registered (MongoDB E11000 duplicate key)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Authenticate user & obtain JWT token",
+        "description": "Validates email and password, returning an access JWT token for Bearer authentication.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthSuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Invalid email or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded (login attempts)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/boards": {
+      "get": {
+        "tags": ["Boards"],
+        "summary": "List workspaces / boards",
+        "description": "Fetches all board workspaces accessible to the user.",
+        "responses": {
+          "200": {
+            "description": "List of boards retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "count": { "type": "integer", "example": 2 },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Board" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Boards"],
+        "summary": "Create a new board workspace",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Board successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Board" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid board payload",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/boards/{id}": {
+      "get": {
+        "tags": ["Boards"],
+        "summary": "Get board workspace by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "MongoDB ObjectId string of the board",
+            "schema": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7a" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Board details retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Board" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Board not found or invalid ObjectId",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "List tasks with optional filters",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "query",
+            "required": false,
+            "description": "Filter tasks belonging to a specific board ID",
+            "schema": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7a" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Filter by task column status",
+            "schema": {
+              "type": "string",
+              "enum": ["todo", "in_progress", "done", "blocked"]
+            }
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "description": "Filter by priority level",
+            "schema": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "urgent"]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Search keyword matching title or description",
+            "schema": { "type": "string", "example": "database" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tasks successfully retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "tasks": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Task" }
+                    },
+                    "total": { "type": "integer", "example": 8 }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing or invalid Bearer token",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Task" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error on payload",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing or invalid Bearer token",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/{id}": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Fetch single task by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "24-character hex MongoDB ObjectId of the task",
+            "schema": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7b" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task details retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Task" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized: Missing Bearer token",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Task not found or invalid ObjectId",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Replace / full update of a task",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task ObjectId string",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Task" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update payload",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Partial update of a task (e.g. status transition)",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task ObjectId string",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Task status or fields updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/Task" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete a task by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Task ObjectId string",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Task deleted successfully (No Content returned)"
+          },
+          "404": {
+            "description": "Task not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Provide a valid JWT token obtained from POST /api/auth/login or register."
+      }
+    },
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "ok" },
+          "uptime": { "type": "number", "example": 142.35 },
+          "timestamp": { "type": "string", "format": "date-time", "example": "2026-09-12T12:40:00.000Z" },
+          "database": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string", "example": "connected" },
+              "readyState": { "type": "integer", "example": 1 }
+            }
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": { "type": "string", "example": "Alex Silva" },
+          "email": { "type": "string", "format": "email", "example": "alex@syncboard.dev" },
+          "password": { "type": "string", "minLength": 6, "example": "password123" }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "alex@syncboard.dev" },
+          "password": { "type": "string", "example": "password123" }
+        }
+      },
+      "AuthSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f70" },
+                  "name": { "type": "string", "example": "Alex Silva" },
+                  "email": { "type": "string", "example": "alex@syncboard.dev" },
+                  "role": { "type": "string", "example": "member" }
+                }
+              },
+              "token": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              }
+            }
+          }
+        }
+      },
+      "Board": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7a" },
+          "title": { "type": "string", "example": "SyncBoard Main Workspace" },
+          "description": { "type": "string", "example": "Collaborative agile kanban board" },
+          "ownerId": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f70" },
+          "members": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["66d3b4e1f8a29b3c4d5e6f70"]
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "BoardCreateRequest": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string", "example": "Product Roadmap 2026" },
+          "description": { "type": "string", "example": "Strategic initiatives and feature board" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7b" },
+          "title": { "type": "string", "example": "Implement Postman Automated Tests" },
+          "description": { "type": "string", "example": "Add test assertions for all status codes" },
+          "status": {
+            "type": "string",
+            "enum": ["todo", "in_progress", "done", "blocked"],
+            "example": "in_progress"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "urgent"],
+            "example": "high"
+          },
+          "boardId": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7a" },
+          "assignee": { "type": "string", "example": "Alex Silva" },
+          "dueDate": { "type": "string", "format": "date", "example": "2026-09-30" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "TaskCreateRequest": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string", "example": "Design MongoDB Aggregation Pipeline" },
+          "description": { "type": "string", "example": "Aggregate metrics by board and user" },
+          "status": { "type": "string", "enum": ["todo", "in_progress", "done", "blocked"], "default": "todo" },
+          "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"], "default": "medium" },
+          "boardId": { "type": "string", "example": "66d3b4e1f8a29b3c4d5e6f7a" },
+          "assignee": { "type": "string", "example": "Alex Silva" },
+          "dueDate": { "type": "string", "format": "date", "example": "2026-10-15" }
+        }
+      },
+      "TaskUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "example": "Updated Task Title" },
+          "description": { "type": "string", "example": "Updated task details" },
+          "status": { "type": "string", "enum": ["todo", "in_progress", "done", "blocked"] },
+          "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+          "assignee": { "type": "string", "example": "Siluni" },
+          "dueDate": { "type": "string", "format": "date", "example": "2026-10-20" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "status": { "type": "integer", "example": 404 },
+          "message": { "type": "string", "example": "Resource not found" },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": []
+          }
+        }
+      }
+    }
+  }
+}

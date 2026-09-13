@@ -40,8 +40,9 @@ export const createTask = asyncHandler(async (req, res) => {
     const userId = resolveUserId(req);
     const user = await userRepository.findById(userId);
     const boardId = req.body?.boardId || user?.boards?.[0] || 'BOARD-01';
+    const taskData = { ...req.body, category: req.body?.category || 'General' };
 
-    const task = await taskService.createTask({ userId, boardId, data: req.body });
+    const task = await taskService.createTask({ userId, boardId, data: taskData });
 
     res.status(201).json({
         success: true,

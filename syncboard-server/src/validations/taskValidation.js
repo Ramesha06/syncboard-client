@@ -15,7 +15,7 @@ const baseTaskShape = {
         error: () => `Status must be one of: ${TASK_STATUSES.join(', ')}`,
     }),
 
-    category: requiredString('Category').trim().min(1, 'Category is required'),
+    category: z.string().trim().default('General').optional(),
 
     dueDate: requiredString('Due date')
         .trim()
